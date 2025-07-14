@@ -1,0 +1,38 @@
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+.footer-navigation {
+  background-color: v.$menu-secondary-bg;
+  padding: 1rem 0;
+  text-align: center;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block; // Para centrar los enlaces
+  }
+
+  li {
+    display: inline;
+    margin: 0 1rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    a {
+      @include m.menu-link-styles(
+        $color: v.$menu-secondary-link-color,
+        $hover-color: v.$menu-secondary-link-hover-color,
+        $padding-y: 0.25rem,
+        $padding-x: 0,
+        $font-size: v.$font-size-sm
+      );
+    }
+  }
+}

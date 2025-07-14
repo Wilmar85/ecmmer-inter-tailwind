@@ -1,0 +1,33 @@
+// Paleta y variables inspiradas en el diseño Mezan
+
+// Colores principales
+$primary: #fbbf24;      // Amarillo principal (botones, acentos)
+$secondary: #1d3557;    // Azul oscuro (header, footer, títulos)
+$accent: #ff7f50;       // Coral/acento (íconos, detalles)
+$info: #48cae4;         // Azul claro (enlaces, badges)
+$success: #22c55e;      // Verde (mensajes de éxito)
+$warning: #f59e42;      // Naranja (mensajes de advertencia)
+$danger: #ef4444;       // Rojo (errores)
+$gray-dark: #22223b;    // Texto principal
+$gray: #4a4e69;         // Texto secundario
+$gray-light: #f8f9fa;   // Fondos claros, secciones
+$white: #fff;
+
+// Gradientes y fondos
+$gradient-main: linear-gradient(90deg, #fbbf24 0%, #ff7f50 100%);
+$bg-section: #f8f9fa;
+$bg-footer: #1d3557;
+
+// Bordes y sombras
+$border-radius: 0.5rem;
+$box-shadow: 0 4px 24px rgba(30, 41, 59, 0.08);
+
+// Fuentes
+$font-main: 'Jost', 'Figtree', Arial, sans-serif;
+$font-secondary: 'Roboto', Arial, sans-serif;
+$font-size-base: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-sm: 0.95rem;
+
+// Otros
+$transition: 0.2s cubic-bezier(0.4,0,0.2,1);

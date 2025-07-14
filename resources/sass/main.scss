@@ -1,0 +1,45 @@
+// Archivo principal de Sass
+
+//config
+@use './config/color' as c;
+@use './config/fonts' as f;
+//mixins
+@use './mixins/_breakpoints.scss' as b;
+//estilos base
+@use './base/normalize' as n;
+//Componentes
+//@use './components/_alerts';
+@use './components/_top-banner';
+
+// ... resto del código
+
+// @import './components/_grid';
+// @import './components/_utilities';
+// @import './components/_helpers';
+// @import './components/_scrollspy';
+// @import './components/_utilities-api';
+
+
+body {
+  background: c.$gray-light;
+  font-family: c.$font-main;
+}
+
+// Puedes seguir agregando más reglas y overrides aquí
+
+
+/* Oculta la barra de desplazamiento en navegadores Webkit (Chrome, Safari) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Oculta la barra de desplazamiento en otros navegadores (Firefox, Edge) */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

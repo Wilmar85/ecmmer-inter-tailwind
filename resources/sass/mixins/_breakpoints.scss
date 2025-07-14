@@ -1,0 +1,52 @@
+@use 'sass:map';
+
+// Mixins reutilizables para media queries, flex, etc.
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Breakpoints responsivos (siguiendo convención Tailwind)
+$breakpoints: (
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1536px
+);
+
+// Mixin para media query "hasta" (máximo)
+@mixin respond-max($breakpoint) {
+  $size: map.get($breakpoints, $breakpoint);
+  @if $size {
+    @media (max-width: #{$size}) {
+      @content;
+    }
+  } @else {
+    @warn 'Breakpoint no válido: #{$breakpoint}';
+  }
+}
+
+// Mixin para media query "desde" (mínimo)
+@mixin respond-min($breakpoint) {
+  $size: map.get($breakpoints, $breakpoint);
+  @if $size {
+    @media (min-width: #{$size}) {
+      @content;
+    }
+  } @else {
+    @warn 'Breakpoint no válido: #{$breakpoint}';
+  }
+}
+
+// Ejemplo de uso:
+// .box {
+//   width: 100%;
+//   @include respond-min('md') {
+//     width: 50%;
+//   }
+//   @include respond-max('sm') {
+//     font-size: 0.9rem;
+//   }
+// }
