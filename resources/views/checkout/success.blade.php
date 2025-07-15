@@ -35,17 +35,51 @@
                                 <dt class="text-sm font-medium text-gray-500 mb-2">Desglose del Total</dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                     <div class="space-y-2">
+                                        @php
+                                            // Calcular el subtotal de los productos (sin IVA)
+                                            $subtotal = $order->items->sum(function($item) {
+                                                return $item->quantity * $item->price;
+                                            });
+                                            
+                                            // Calcular el IVA (19% del subtotal)
+                                            $iva = $subtotal * 0.19;
+                                            
+                                            // Calcular el costo de envío
+                                            $shipping = 0;
+                                            if($order->shipping_method === 'delivery') {
+                                                $shipping = $order->shipping_cost ?? 0;
+                                            }
+                                            
+                                            // Calcular el total (subtotal + IVA + envío)
+                                            $total = $subtotal + $iva + $shipping;
+                                        @endphp
+                                        
+                                        @foreach($order->items as $item)
                                         <div class="flex justify-between">
-                                            <span class="text-gray-500">Subtotal:</span>
-                                            <span>${{ number_format($order->total / 1.19, 2) }}</span>
+                                            <span class="text-gray-500">{{ $item->product_name }} (x{{ $item->quantity }})</span>
+                                            <span>${{ number_format($item->price * $item->quantity, 2) }}</span>
                                         </div>
+                                        @endforeach
+                                        
+                                        @if($shipping > 0)
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">Envío:</span>
+                                            <span>${{ number_format($shipping, 2) }}</span>
+                                        </div>
+                                        @endif
+                                        
+                                        <div class="flex justify-between pt-2 border-t border-gray-200">
+                                            <span class="font-medium">Subtotal:</span>
+                                            <span class="font-medium">${{ number_format($subtotal, 2) }}</span>
+                                        </div>
+                                        
                                         <div class="flex justify-between">
                                             <span class="text-gray-500">IVA (19%):</span>
-                                            <span>${{ number_format($order->total - ($order->total / 1.19), 2) }}</span>
+                                            <span>${{ number_format($iva, 2) }}</span>
                                         </div>
                                         <div class="flex justify-between pt-2 border-t border-gray-200">
                                             <span class="font-medium">Total:</span>
-                                            <span class="font-medium">${{ number_format($order->total, 2) }}</span>
+                                            <span class="font-medium">${{ number_format($total, 2) }}</span>
                                         </div>
                                     </div>
                                 </dd>

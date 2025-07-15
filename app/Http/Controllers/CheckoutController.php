@@ -128,11 +128,15 @@ class CheckoutController extends Controller
             $subtotal = $cart->items->sum(function ($item) {
                 return $item->quantity * $item->product->price;
             });
-            $shipping = $request->shipping_method === 'delivery' ? 10.00 : 0.00;
-            // Calculate total with 19% IVA
-            $subtotalWithIva = $subtotal * 1.19;
-            $shippingWithIva = $shipping * 1.19;
-            $total = $subtotalWithIva + $shippingWithIva;
+            
+            // Obtener el costo de envío del formulario o usar 0 si es retiro en tienda
+            $shipping = $shippingMethod === 'delivery' ? floatval($request->input('shipping_cost', 0)) : 0.00;
+            
+            // Calcular IVA (19%)
+            $iva = $subtotal * 0.19;
+            
+            // Calcular el total (subtotal + IVA + envío)
+            $total = $subtotal + $iva + $shipping;
 
             // Generar número de orden único
             $orderNumber = Order::generateOrderNumber();

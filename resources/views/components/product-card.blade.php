@@ -4,19 +4,19 @@
     class="group bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 transform hover:scale-105 flex flex-col justify-between min-h-[340px]">
     @if ($product->images->isNotEmpty())
         @php
-            $imgUrl = method_exists($product->images->first(), 'getImageUrlAttribute')
-                ? $product->images->first()->image_url
-                : (property_exists($product->images->first(), 'image_path')
-                    ? asset('storage/' . $product->images->first()->image_path)
-                    : asset('storage/' . $product->images->first()->path));
+            // Obtener la imagen primaria o la primera imagen disponible
+            $image = $product->primaryImage ?? $product->images->first();
+            // Usar el accesor image_url del modelo ProductImage
+            $imgUrl = $image->image_url;
         @endphp
 
         <a href="{{ route('products.show', $product) }}">
-            <div class="h-48 w-full bg-gray-50 flex items-center justify-center">
-                {{-- CAMBIO AQUÍ: Se usó object-contain --}}
-                <img src="{{ $imgUrl }}" alt="{{ $product->name }}"
-                    class="h-full w-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                    loading="lazy">
+            <div class="h-48 w-full bg-gray-50 flex items-center justify-center overflow-hidden">
+                <img src="{{ $imgUrl }}" 
+                     alt="{{ $product->name }}"
+                     class="h-full w-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
+                     onerror="this.onerror=null; this.src='{{ asset('images/placeholder-product.png') }}'"
+                     loading="lazy">
             </div>
         </a>
 

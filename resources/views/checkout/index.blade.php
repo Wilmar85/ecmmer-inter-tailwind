@@ -81,6 +81,213 @@
                             </div>
 
                             <script>
+                                // Costos de envío por barrio
+                                const shippingCosts = {
+                                    'Bogotá': {
+                                        'Chapinero': 5000,
+                                        'Usaquén': 6000,
+                                        'Teusaquillo': 5500,
+                                        'Suba': 7000,
+                                        'Fontibón': 8000,
+                                        'Kennedy': 9000,
+                                        'Engativá': 7500,
+                                        'Barrios Unidos': 6000,
+                                        'Puente Aranda': 7000,
+                                        'Antonio Nariño': 6500,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Medellín': {
+                                        'El Poblado': 5000,
+                                        'Laureles': 6000,
+                                        'Belen': 5500,
+                                        'Castilla': 7000,
+                                        'Robledo': 8000,
+                                        'Manrique': 7500,
+                                        'Aranjuez': 6000,
+                                        'Buenos Aires': 7000,
+                                        'San Javier': 6500,
+                                        'La América': 5500,
+                                        'La Candelaria': 5000,
+                                        'Doce de Octubre': 6000,
+                                        'Guayabal': 7000,
+                                        'San Antonio de Prado': 7500,
+                                        'Santa Cruz': 8000,
+                                        'Popular': 6500,
+                                        'Villa Hermosa': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Cali': {
+                                        'San Fernando': 5000,
+                                        'Granada': 6000,
+                                        'El Peñón': 5500,
+                                        'Aguablanca': 7000,
+                                        'Ciudad Jardín': 8000,
+                                        'San Antonio': 7500,
+                                        'La Flora': 6000,
+                                        'Versalles': 7000,
+                                        'El Ingenio': 6500,
+                                        'Santa Mónica': 5500,
+                                        'La Merced': 5000,
+                                        'Alfonso López': 6000,
+                                        'Siloé': 7000,
+                                        'Meléndez': 7500,
+                                        'San Nicolás': 8000,
+                                        'Sucre': 6500,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Barranquilla': {
+                                        'El Prado': 5000,
+                                        'Alto Prado': 6000,
+                                        'Villa Country': 5500,
+                                        'Ciudad Jardín': 7000,
+                                        'Boston': 8000,
+                                        'La Concepción': 7500,
+                                        'Las Delicias': 6000,
+                                        'San Vicente': 7000,
+                                        'Rebolo': 6500,
+                                        'La Unión': 5500,
+                                        'Las Nieves': 5000,
+                                        'Montecristo': 6000,
+                                        'La Ceiba': 7000,
+                                        'El Recreo': 7500,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Cartagena': {
+                                        'Getsemaní': 5000,
+                                        'Bocagrande': 6000,
+                                        'Manga': 5500,
+                                        'El Cabrero': 7000,
+                                        'La Matuna': 8000,
+                                        'Pie de la Popa': 7500,
+                                        'Crespo': 6000,
+                                        'Chambacú': 7000,
+                                        'San Diego': 6500,
+                                        'Torices': 5500,
+                                        'La Boquilla': 5000,
+                                        'El Bosque': 6000,
+                                        'Olaya Herrera': 7000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Bucaramanga': {
+                                        'Cabecera': 5000,
+                                        'Alarcón': 6000,
+                                        'Antonia Santos': 5500,
+                                        'Provenza': 7000,
+                                        'La Concordia': 8000,
+                                        'Mutis': 7500,
+                                        'San Alonso': 6000,
+                                        'San Francisco': 7000,
+                                        'La Universidad': 6500,
+                                        'Sotomayor': 5500,
+                                        'Girardot': 5000,
+                                        'La Feria': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Pereira': {
+                                        'Cuba': 5000,
+                                        'Alamos': 6000,
+                                        'Centro': 5500,
+                                        'Boston': 7000,
+                                        'San Joaquín': 8000,
+                                        'Villavicencio': 7500,
+                                        'El Jardín': 6000,
+                                        'San Nicolás': 7000,
+                                        'La Circunvalar': 6500,
+                                        'Villa Santana': 5500,
+                                        'Kennedy': 5000,
+                                        'San Fernando': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Manizales': {
+                                        'Palogrande': 5000,
+                                        'La Enea': 6000,
+                                        'Chipre': 5500,
+                                        'El Cable': 7000,
+                                        'San Jorge': 8000,
+                                        'La Francia': 7500,
+                                        'Centro': 6000,
+                                        'Malhabar': 7000,
+                                        'Los Rosales': 6500,
+                                        'Villa Pilar': 5500,
+                                        'Campohermoso': 5000,
+                                        'Villahermosa': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Cúcuta': {
+                                        'La Playa': 5000,
+                                        'Ciudad Jardín': 6000,
+                                        'La Cabrera': 5500,
+                                        'Quinta Oriental': 7000,
+                                        'Aeropuerto': 8000,
+                                        'El Rodeo': 7500,
+                                        'La Victoria': 6000,
+                                        'San José de Cúcuta': 7000,
+                                        'Colsag': 6500,
+                                        'Avenida 6': 5500,
+                                        'La Libertad': 5000,
+                                        'Los Patios': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'Ibagué': {
+                                        'Centro': 5000,
+                                        'La Pola': 6000,
+                                        'La Francia': 5500,
+                                        'El Salado': 7000,
+                                        'El Salado Popular': 8000,
+                                        'San Simón': 7500,
+                                        'El Bosque': 6000,
+                                        'El Jardín': 7000,
+                                        'San Fernando': 6500,
+                                        'El Líbano': 5500,
+                                        'El Vergel': 5000,
+                                        'Picaleña': 6000,
+                                        'default': 8000 // Costo por defecto para otros barrios
+                                    },
+                                    'default': 10000 // Costo por defecto para otras ciudades
+                                };
+
+                                // Obtener el costo de envío basado en la ciudad y el barrio
+                                function getShippingCost(city, neighborhood) {
+                                    if (shippingCosts[city] && shippingCosts[city][neighborhood]) {
+                                        return shippingCosts[city][neighborhood];
+                                    } else if (shippingCosts[city] && shippingCosts[city]['default']) {
+                                        return shippingCosts[city]['default'];
+                                    } else {
+                                        return shippingCosts['default'];
+                                    }
+                                }
+
+                                // Actualizar el costo de envío cuando cambia el barrio
+                                function updateShippingCost() {
+                                    try {
+                                        const city = document.getElementById('city').value;
+                                        const neighborhood = document.getElementById('neighborhood').value;
+                                        const deliveryChecked = document.getElementById('delivery').checked;
+                                        
+                                        if (deliveryChecked) {
+                                            const shippingCost = getShippingCost(city, neighborhood);
+                                            console.log('Actualizando costo de envío a:', shippingCost);
+                                            
+                                            // Actualizar el valor en el input oculto
+                                            const shippingInput = document.getElementById('shipping-cost-input');
+                                            if (shippingInput) {
+                                                shippingInput.value = shippingCost;
+                                            }
+                                            
+                                            // Actualizar el valor mostrado
+                                            const shippingDisplay = document.getElementById('shipping-cost');
+                                            if (shippingDisplay) {
+                                                shippingDisplay.textContent = formatCurrency(shippingCost);
+                                            }
+                                            
+                                            // Actualizar el total
+                                            updateTotal();
+                                        }
+                                    } catch (error) {
+                                        console.error('Error al actualizar el costo de envío:', error);
+                                    }
+                                }
+
                                 // Manejo de barrios por ciudad
                                 const neighborhoodsByCity = {
                                     'Bogotá': [
@@ -108,29 +315,52 @@
                                         'Palogrande', 'La Enea', 'Chipre', 'El Cable', 'San Jorge', 'La Francia', 'Centro', 'Malhabar', 'Los Rosales', 'Villa Pilar', 'Campohermoso', 'Villahermosa'
                                     ],
                                     'Cúcuta': [
-                                        'La Ceiba', 'Caobos', 'Centro', 'La Riviera', 'Guaimaral', 'San Luis', 'San Rafael', 'El Contento', 'La Playa', 'Motilones', 'Los Caobos', 'La Cabrera'
+                                        'La Playa', 'Ciudad Jardín', 'La Cabrera', 'Quinta Oriental', 'Aeropuerto', 'El Rodeo', 'La Victoria', 'San José de Cúcuta', 'Colsag', 'Avenida 6', 'La Libertad', 'Los Patios'
+                                    ],
+                                    'Ibagué': [
+                                        'Centro', 'La Pola', 'La Francia', 'El Salado', 'El Salado Popular', 'San Simón', 'El Bosque', 'El Jardín', 'San Fernando', 'El Líbano', 'El Vergel', 'Picaleña'
                                     ]
                                 };
+
+                                // Inicializar los selectores de ciudad y barrio
                                 const citySelect = document.getElementById('city');
-                                if (citySelect) {
-                                    citySelect.addEventListener('change', function() {
-                                        const city = this.value;
-                                        const neighborhoodSelect = document.getElementById('neighborhood');
-                                        if (neighborhoodSelect) {
-                                            neighborhoodSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
-                                            if (neighborhoodsByCity[city]) {
-                                                neighborhoodsByCity[city].forEach(function(barrio) {
-                                                    const opt = document.createElement('option');
-                                                    opt.value = barrio;
-                                                    opt.textContent = barrio;
-                                                    neighborhoodSelect.appendChild(opt);
-                                                });
-                                            }
+                                const neighborhoodSelect = document.getElementById('neighborhood');
+                                
+                                if (citySelect && neighborhoodSelect) {
+                                    // Función para actualizar los barrios basados en la ciudad seleccionada
+                                    function updateNeighborhoods() {
+                                        const selectedCity = citySelect.value;
+                                        
+                                        // Limpiar opciones actuales
+                                        neighborhoodSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
+                                        
+                                        // Agregar opciones de barrios para la ciudad seleccionada
+                                        if (selectedCity && neighborhoodsByCity[selectedCity]) {
+                                            neighborhoodsByCity[selectedCity].forEach(function(neighborhood) {
+                                                const option = document.createElement('option');
+                                                option.value = neighborhood;
+                                                option.textContent = neighborhood;
+                                                neighborhoodSelect.appendChild(option);
+                                            });
                                         }
-                                    });
+                                        
+                                        // Habilitar o deshabilitar el select de barrios
+                                        neighborhoodSelect.disabled = !selectedCity;
+                                        
+                                        // Actualizar el costo de envío cuando cambia la ciudad
+                                        updateShippingCost();
+                                    }
+                                    
+                                    // Actualizar barrios cuando cambia la ciudad
+                                    citySelect.addEventListener('change', updateNeighborhoods);
+                                    
+                                    // Actualizar costo de envío cuando cambia el barrio
+                                    neighborhoodSelect.addEventListener('change', updateShippingCost);
+                                    
+                                    // Inicializar barrios al cargar la página
+                                    updateNeighborhoods();
                                 }
                                 </script>
-    
 
                             </div>
 
@@ -258,7 +488,26 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
                                 </div>
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-600">Envío</span>
-                                    <span id="shipping-cost" class="font-medium">${{ number_format($shipping, 2) }}</span>
+                                    <div class="flex items-center">
+                                        <input type="hidden" name="shipping_cost" id="shipping-cost-input" value="{{ $shipping }}">
+                                        <span id="shipping-cost" class="font-medium mr-2">${{ number_format($shipping, 2) }}</span>
+                                        <button type="button" id="edit-shipping-btn" class="text-indigo-600 hover:text-indigo-800 text-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="shipping-edit-container" class="hidden mt-2">
+                                    <div class="flex items-center">
+                                        <input type="number" id="manual-shipping-input" class="w-24 px-2 py-1 border border-gray-300 rounded-md text-sm" min="0" step="100">
+                                        <button type="button" id="save-shipping-btn" class="ml-2 px-2 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                                            Guardar
+                                        </button>
+                                        <button type="button" id="cancel-shipping-edit" class="ml-2 px-2 py-1 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300">
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="flex justify-between text-base font-medium">
                                     <span class="text-gray-900">Total</span>
@@ -277,41 +526,148 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
     <script>
         // Función para manejar la visibilidad de los campos de dirección y actualizar costos
         function toggleShippingFields() {
-            const shippingMethod = document.querySelector('input[name="shipping_method"]:checked').value;
-            const shippingAddressSection = document.getElementById('shipping-address-section');
-            const shippingFields = shippingAddressSection.querySelectorAll('input');
-            const shippingCost = shippingMethod === 'delivery' ? 10 : 0;
-            
-            // Actualizar visibilidad y estado de los campos
-            shippingAddressSection.style.display = shippingMethod === 'delivery' ? 'block' : 'none';
-            shippingFields.forEach(field => {
-                field.required = shippingMethod === 'delivery';
-                field.disabled = shippingMethod !== 'delivery';
-                if (shippingMethod !== 'delivery') field.value = '';
-            });
-
-            // Actualizar costos y etiquetas
-            updateOrderSummary(shippingCost);
+            try {
+                const shippingMethodRadio = document.querySelector('input[name="shipping_method"]:checked');
+                if (!shippingMethodRadio) return;
+                
+                const shippingMethod = shippingMethodRadio.value;
+                const shippingAddressSection = document.getElementById('shipping-address-section');
+                const shippingLabel = document.getElementById('shipping-label');
+                const shippingCostInput = document.getElementById('shipping-cost-input');
+                
+                if (shippingMethod === 'pickup') {
+                    // Ocultar campos de dirección y establecer costo de envío a 0
+                    if (shippingAddressSection) shippingAddressSection.style.display = 'none';
+                    if (shippingLabel) shippingLabel.textContent = 'Envío (Retiro en Tienda)';
+                    if (shippingCostInput) shippingCostInput.value = '0';
+                } else {
+                    // Mostrar campos de dirección y actualizar costo según ciudad/barrio
+                    if (shippingAddressSection) shippingAddressSection.style.display = 'block';
+                    if (shippingLabel) shippingLabel.textContent = 'Envío';
+                    updateShippingCost();
+                }
+                
+                updateTotal();
+            } catch (error) {
+                console.error('Error en toggleShippingFields:', error);
+            }
         }
 
-        // Función para actualizar el resumen del pedido
-        function updateOrderSummary(shippingCost) {
-            const subtotal = {{ $subtotal }};
-            const iva = subtotal * 0.19;
-            const total = subtotal + iva + shippingCost;
-            const shippingMethod = document.querySelector('input[name="shipping_method"]:checked').value;
-            
-            // Actualizar montos
-            document.getElementById('shipping-cost').textContent = `$${shippingCost.toFixed(2)}`;
-            document.getElementById('total-amount').textContent = `$${total.toFixed(2)}`;
-            
-            // Actualizar etiqueta de envío
-            const shippingLabel = document.querySelector('#shipping-cost').parentElement.querySelector('.text-gray-600');
-            shippingLabel.textContent = shippingMethod === 'pickup' ? 'Envío (Retiro en Tienda)' : 'Envío';
+        // Función para actualizar el total
+        function updateTotal() {
+            try {
+                // Obtener el subtotal del carrito y asegurarse de que sea un número
+                const subtotal = Number({{ $subtotal }});
+                if (isNaN(subtotal)) {
+                    throw new Error('Subtotal no es un número válido');
+                }
+                
+                // Obtener el método de envío seleccionado
+                const shippingMethod = document.querySelector('input[name="shipping_method"]:checked');
+                const isPickup = shippingMethod && shippingMethod.value === 'pickup';
+                
+                // Calcular el IVA (19% del subtotal)
+                const tax = subtotal * 0.19;
+                
+                // Obtener el costo de envío (0 si es retiro en tienda)
+                let shipping = 0;
+                if (!isPickup) {
+                    const shippingInput = document.getElementById('shipping-cost-input');
+                    // Convertir a número y manejar valores no numéricos
+                    shipping = shippingInput ? parseFloat(shippingInput.value) || 0 : 0;
+                }
+                
+                // Calcular el total (subtotal + IVA + envío si aplica)
+                const total = subtotal + tax + shipping;
+                
+                // Función segura para actualizar el contenido de un elemento
+                function safeUpdateElement(id, value) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = value;
+                    }
+                }
+                
+                // Actualizar los valores en la interfaz de manera segura
+                safeUpdateElement('subtotal-amount', formatCurrency(subtotal));
+                safeUpdateElement('tax-amount', formatCurrency(tax));
+                safeUpdateElement('shipping-cost', isPickup ? '$0' : formatCurrency(shipping));
+                safeUpdateElement('total-amount', formatCurrency(total));
+                
+                // Actualizar el valor oculto del formulario
+                const shippingInput = document.getElementById('shipping-cost-input');
+                if (shippingInput) {
+                    shippingInput.value = isPickup ? '0' : shipping.toString();
+                }
+                
+                // Actualizar el input manual si está visible
+                const manualInput = document.getElementById('manual-shipping-input');
+                if (manualInput && !manualInput.hidden) {
+                    manualInput.value = isPickup ? '0' : shipping.toString();
+                }
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error en updateTotal:', error);
+                return false;
+            }
+        }
+
+        // Función para formatear el valor numérico como moneda
+        function formatCurrency(value) {
+            return '$' + parseFloat(value || 0).toLocaleString('es-CO');
+        }
+
+        // Función para manejar la edición manual del costo de envío
+        function setupShippingEdit() {
+            const editBtn = document.getElementById('edit-shipping-btn');
+            const shippingCost = document.getElementById('shipping-cost');
+            const shippingInput = document.getElementById('shipping-cost-input');
+            const editContainer = document.getElementById('shipping-edit-container');
+            const manualInput = document.getElementById('manual-shipping-input');
+            const saveBtn = document.getElementById('save-shipping-btn');
+            const cancelBtn = document.getElementById('cancel-shipping-edit');
+
+            if (!editBtn) return;
+
+            // Mostrar el formulario de edición
+            editBtn.addEventListener('click', function() {
+                const currentValue = shippingInput.value || '0';
+                manualInput.value = currentValue;
+                editContainer.classList.remove('hidden');
+                manualInput.focus();
+            });
+
+            // Guardar el valor manual
+            function saveManualShipping() {
+                const newValue = parseFloat(manualInput.value) || 0;
+                shippingInput.value = newValue;
+                shippingCost.textContent = formatCurrency(newValue);
+                editContainer.classList.add('hidden');
+                updateTotal();
+            }
+
+            // Manejar clic en guardar
+            saveBtn.addEventListener('click', saveManualShipping);
+
+            // Manejar la tecla Enter en el input
+            manualInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveManualShipping();
+                }
+            });
+
+            // Cancelar la edición
+            cancelBtn.addEventListener('click', function() {
+                editContainer.classList.add('hidden');
+            });
         }
 
         // Inicializar y agregar event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // Configurar la edición manual del costo de envío
+            setupShippingEdit();
             // Agregar listeners para cambios en el método de envío
             document.querySelectorAll('input[name="shipping_method"]').forEach(radio => {
                 radio.addEventListener('change', toggleShippingFields);
@@ -324,6 +680,18 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
         // Validación del formulario y procesamiento del pedido
         document.getElementById('checkout-form').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Asegurarse de que el valor del envío esté actualizado
+            updateTotal();
+            
+            // Verificar que el valor del envío sea un número válido
+            const shippingInput = document.getElementById('shipping-cost-input');
+            const shippingValue = parseFloat(shippingInput ? shippingInput.value : 0) || 0;
+            
+            // Actualizar el valor en el formulario
+            if (shippingInput) {
+                shippingInput.value = shippingValue.toString();
+            }
 
             // Alerta de confirmación antes de procesar el pedido
             const confirmResult = await Swal.fire({

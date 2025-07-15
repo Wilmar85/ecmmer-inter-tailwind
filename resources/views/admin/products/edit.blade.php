@@ -128,6 +128,9 @@
                                         <p class="pl-1">o arrastrar y soltar</p>
                                     </div>
                                     <p class="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
+                                    <div id="image-preview" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <!-- Aquí se mostrarán las vistas previas de las imágenes -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,9 +168,42 @@
         function deleteImage(imageId) {
             if (confirm('¿Estás seguro de que deseas eliminar esta imagen?')) {
                 const form = document.getElementById('delete-image-form');
-                form.action = "{{ route('admin.admin.product-images.destroy', ['productImage' => '']) }}/" + imageId;
+                // Construir la URL manualmente para evitar problemas con la generación de rutas
+                form.action = "/admin/product-images/" + imageId;
                 form.submit();
             }
         }
+
+        // Vista previa de imágenes seleccionadas
+        document.getElementById('images').addEventListener('change', function(event) {
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = ''; // Limpiar vistas previas anteriores
+            
+            const files = event.target.files;
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (!file.type.match('image.*')) {
+                    continue; // Saltar si no es una imagen
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'relative';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-32 object-cover rounded-lg';
+                    
+                    previewDiv.appendChild(img);
+                    previewContainer.appendChild(previewDiv);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
 </x-app-layout>

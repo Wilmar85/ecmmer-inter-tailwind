@@ -63,10 +63,22 @@ class ProductController extends Controller
             if (!is_array($files)) {
                 $files = [$files];
             }
+            
+            // Asegurarse de que el directorio existe
+            $storagePath = 'images/products';
+            if (!file_exists(storage_path('app/public/' . $storagePath))) {
+                \Illuminate\Support\Facades\File::makeDirectory(storage_path('app/public/' . $storagePath), 0755, true);
+            }
+            
             foreach ($files as $image) {
                 if ($image && $image->isValid()) {
-                    $path = $image->store('products', 'public');
-ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    // Guardar en storage/app/public/images/products
+                    $path = $image->store($storagePath, 'public');
+                    
+                    // Optimizar la imagen
+                    ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    
+                    // Guardar la ruta relativa en la base de datos
                     $product->images()->create(['image_path' => $path]);
                 }
             }
@@ -89,25 +101,34 @@ ImageOptimizer::optimize(storage_path('app/public/' . $path));
             'stock' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'active' => 'nullable|boolean',
+            'images' => 'nullable',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        // Generar slug único
-        $baseSlug = \Illuminate\Support\Str::slug($validated['name']);
-        $slug = $baseSlug;
-        $counter = 1;
-        while (\App\Models\Product::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
+        
+        // Generar slug único solo si el nombre ha cambiado
+        if ($product->name !== $validated['name']) {
+            $baseSlug = \Illuminate\Support\Str::slug($validated['name']);
+            $slug = $baseSlug;
+            $counter = 1;
+            while (\App\Models\Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+            $validated['slug'] = $slug;
         }
-        $validated['slug'] = $slug;
+
         if (empty($validated['sku'])) {
             $validated['sku'] = 'SKU-' . time() . '-' . mt_rand(1000, 9999);
         }
+
         $validated['active'] = $request->input('active', 0);
+        
         // Normalizar la marca (Primera letra mayúscula, resto minúsculas)
         $brandName = ucfirst(mb_strtolower(trim($request->brand_name)));
+        
         // Buscar marca existente (ignorando mayúsculas/minúsculas)
         $brand = \App\Models\Brand::whereRaw('LOWER(name) = ?', [mb_strtolower($brandName)])->first();
+        
         if (!$brand) {
             // Si no existe, crearla
             $brand = \App\Models\Brand::create([
@@ -115,22 +136,35 @@ ImageOptimizer::optimize(storage_path('app/public/' . $path));
                 'slug' => \Illuminate\Support\Str::slug($brandName)
             ]);
         }
+        
         $validated['brand_id'] = $brand->id;
+        
+        // Actualizar el producto
         $product->update($validated);
+        
+        // Manejar la carga de imágenes adicionales
         if ($request->hasFile('images')) {
-            // Elimina imágenes anteriores y sus archivos
-            foreach ($product->images as $img) {
-                \Storage::disk('public')->delete($img->image_path);
-                $img->delete();
-            }
             $files = $request->file('images');
+            
             if (!is_array($files)) {
                 $files = [$files];
             }
+            
+            // Asegurarse de que el directorio existe
+            $storagePath = 'images/products';
+            if (!file_exists(storage_path('app/public/' . $storagePath))) {
+                \Illuminate\Support\Facades\File::makeDirectory(storage_path('app/public/' . $storagePath), 0755, true);
+            }
+            
             foreach ($files as $image) {
                 if ($image && $image->isValid()) {
-                    $path = $image->store('products', 'public');
-ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    // Guardar en storage/app/public/images/products
+                    $path = $image->store($storagePath, 'public');
+                    
+                    // Optimizar la imagen
+                    ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    
+                    // Guardar la ruta relativa en la base de datos
                     $product->images()->create(['image_path' => $path]);
                 }
             }

@@ -12,7 +12,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Jost', 'Roboto', ...defaultTheme.fontFamily.sans],
             },
             // AQUÍ REGISTRAMOS LOS COLORES
             colors: {
