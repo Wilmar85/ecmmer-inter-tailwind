@@ -4,43 +4,69 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- Placeholder: datos históricos para tendencias (simulados, reemplazar por AJAX) ---
     const trendDates = ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Hoy'];
-    const trendPageLoad = [2.1, 2.0, 1.9, 2.2, 2.0, 1.8, parseFloat(document.querySelector('[data-chart-pageload]').dataset.chartPageload)];
-    const trendBounceRate = [45, 42, 44, 48, 47, 43, parseFloat(document.querySelector('[data-chart-bouncerate]').dataset.chartBouncerate)];
+    // Asegúrate de que estos elementos existan antes de intentar acceder a .dataset
+    const pageLoadElement = document.querySelector('[data-chart-pageload]');
+    const bounceRateElement = document.querySelector('[data-chart-bouncerate]');
+
+    const trendPageLoad = [2.1, 2.0, 1.9, 2.2, 2.0, 1.8, pageLoadElement ? parseFloat(pageLoadElement.dataset.chartPageload) : 0];
+    const trendBounceRate = [45, 42, 44, 48, 47, 43, bounceRateElement ? parseFloat(bounceRateElement.dataset.chartBouncerate) : 0];
     // --- END Placeholder ---
+
+    // Configuración global de Chart.js para soporte de modo oscuro
+    function applyChartTheme() {
+        const chartTextColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b';
+        Chart.defaults.color = chartTextColor;
+        // Podrías necesitar actualizar colores de legendas/tooltips si no se heredan
+        Chart.defaults.plugins.legend.labels.color = chartTextColor;
+        Chart.defaults.plugins.tooltip.titleColor = chartTextColor;
+        Chart.defaults.plugins.tooltip.bodyColor = chartTextColor;
+    }
+    applyChartTheme(); // Aplicar al cargar
+    // Escuchar cambios en el tema (si tienes un observador de mutaciones o un evento de tema)
+    // Esto se maneja en el script inline en dashboard.blade.php con el toggleDarkMode
+
     // Chart de Velocidad de Carga (placeholder: solo valor actual)
+    let chartPageLoadInstance = null;
     if (document.getElementById('chartPageLoad')) {
-        new Chart(document.getElementById('chartPageLoad').getContext('2d'), {
+        chartPageLoadInstance = new Chart(document.getElementById('chartPageLoad').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Actual'],
                 datasets: [{
                     label: 'Segundos',
-                    data: [parseFloat(document.querySelector('[data-chart-pageload]').dataset.chartPageload)],
+                    data: [pageLoadElement ? parseFloat(pageLoadElement.dataset.chartPageload) : 0],
                     backgroundColor: '#2563eb',
                 }]
             },
             options: {
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } },
+                    x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } }
+                }
             }
         });
     }
 
     // Chart de Tasa de Rebote (placeholder: solo valor actual)
+    let chartBounceRateInstance = null;
     if (document.getElementById('chartBounceRate')) {
-        new Chart(document.getElementById('chartBounceRate').getContext('2d'), {
+        chartBounceRateInstance = new Chart(document.getElementById('chartBounceRate').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Actual'],
                 datasets: [{
                     label: '%',
-                    data: [parseFloat(document.querySelector('[data-chart-bouncerate]').dataset.chartBouncerate)],
+                    data: [bounceRateElement ? parseFloat(bounceRateElement.dataset.chartBouncerate) : 0],
                     backgroundColor: '#dc2626',
                 }]
             },
             options: {
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, max: 100 } }
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } },
+                    x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } }
+                }
             }
         });
     }
@@ -133,8 +159,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Gráfico de tendencia de velocidad de carga (línea)
+    let trendPageLoadInstance = null;
     if (document.getElementById('trendPageLoad')) {
-        new Chart(document.getElementById('trendPageLoad').getContext('2d'), {
+        trendPageLoadInstance = new Chart(document.getElementById('trendPageLoad').getContext('2d'), {
             type: 'line',
             data: {
                 labels: trendDates,
@@ -149,14 +176,18 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } },
+                    x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } }
+                }
             }
         });
     }
 
     // Gráfico de tendencia de tasa de rebote (línea)
+    let trendBounceRateInstance = null;
     if (document.getElementById('trendBounceRate')) {
-        new Chart(document.getElementById('trendBounceRate').getContext('2d'), {
+        trendBounceRateInstance = new Chart(document.getElementById('trendBounceRate').getContext('2d'), {
             type: 'line',
             data: {
                 labels: trendDates,
@@ -171,110 +202,164 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, max: 100 } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } },
+                    x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } }
+                },
                 animation: { duration: 1200, easing: 'easeOutQuart' },
                 interaction: { intersect: false },
                 hover: { intersect: false },
-                tooltips: { enabled: false },
+                tooltips: { enabled: false }, // Considerar habilitar tooltips si se desea interactividad
                 hoverOffset: 4
             }
         });
     }
 
     // Pie chart de dispositivos
-    if (document.getElementById('chartDevices')) {
-        // Soporte dark mode para todos los charts
-        const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (darkMode) {
-            Chart.defaults.color = '#f3f4f6';
-            document.documentElement.style.setProperty('--chart-text', '#f3f4f6');
-        } else {
-            Chart.defaults.color = '#1e293b';
-            document.documentElement.style.setProperty('--chart-text', '#1e293b');
-        }
-    
-        // Obtener los datos de dispositivos desde el DOM (puedes mejorarlo con AJAX)
+    let devicesPieChart = null; // Variable para la instancia del gráfico
+    if (document.getElementById('pieDevices')) { // CORREGIDO: Usar 'pieDevices'
+        // Obtener los datos de dispositivos desde el DOM (window.devicesData ya está en dashboard.blade.php)
         const deviceLabels = [];
         const deviceCounts = [];
-        document.querySelectorAll('#pieDevices').forEach(function(canvas) {
-            // Solo uno por ahora
-            if (window.devicesData) {
-                Object.entries(window.devicesData).forEach(([label, count]) => {
-                    deviceLabels.push(label.charAt(0).toUpperCase() + label.slice(1));
-                    deviceCounts.push(parseInt(count));
-                });
-            }
-        });
+
+        if (window.devicesData) {
+            Object.entries(window.devicesData).forEach(([label, count]) => {
+                deviceLabels.push(label.charAt(0).toUpperCase() + label.slice(1));
+                deviceCounts.push(parseInt(count));
+            });
+        }
         if (deviceLabels.length > 0) {
-            new Chart(document.getElementById('pieDevices').getContext('2d'), {
+            devicesPieChart = new Chart(document.getElementById('pieDevices').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: deviceLabels,
                     datasets: [{
                         data: deviceCounts,
-                        backgroundColor: ['#2563eb','#16a34a','#f59e42','#dc2626'],
+                        backgroundColor: ['#2563eb','#16a34a','#f59e42','#dc2626'], // Colores sólidos para los segmentos
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--chart-bg') || '#ffffff', // Borde para separación, considerar un color que contraste
+                        borderWidth: 2
                     }]
                 },
                 options: {
-                    plugins: { legend: { position: 'bottom' } }
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b' } },
+                        tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}` } }
+                    }
                 }
             });
         }
     }
 
     // --- AJAX para actualización en tiempo real ---
-    let dashboardCharts = {};
-    function updateDashboardData(filters = {}) {
+    // Exponer las instancias de los gráficos para poder actualizarlas
+    window.dashboardCharts = {
+        pageLoadBar: chartPageLoadInstance,
+        bounceBar: chartBounceRateInstance,
+        pageLoadTrend: trendPageLoadInstance,
+        bounceTrend: trendBounceRateInstance,
+        devicesPie: devicesPieChart,
+        salesByProduct: salesByProductChart,
+        salesStacked: salesStackedChart
+    };
+
+    // Hacer esta función global para que el script inline en dashboard.blade.php pueda llamarla
+    window.updateDashboardData = function(filters = {}) {
         const params = new URLSearchParams(filters).toString();
         fetch('/admin/dashboard/data?' + params)
             .then(res => res.json())
             .then(data => {
-                // Actualizar gráficos principales
-                if (dashboardCharts.pageLoadBar && data.averagePageLoadTime !== undefined) {
-                    dashboardCharts.pageLoadBar.data.datasets[0].data = [data.averagePageLoadTime];
-                    dashboardCharts.pageLoadBar.update();
+                // Actualizar métricas de texto
+                if (data.totalRevenue !== undefined) {
+                    document.getElementById('totalRevenueDisplay').innerText = `$${data.totalRevenue.toFixed(2)}`;
                 }
-                if (dashboardCharts.bounceBar && data.bounceRate !== undefined) {
-                    dashboardCharts.bounceBar.data.datasets[0].data = [data.bounceRate];
-                    dashboardCharts.bounceBar.update();
+                if (data.averageOrderValue !== undefined) {
+                    document.getElementById('averageOrderValueDisplay').innerText = `$${data.averageOrderValue.toFixed(2)}`;
+                }
+                if (data.conversionRate !== undefined) {
+                    document.getElementById('conversionRateDisplay').innerText = `${data.conversionRate}%`;
+                }
+                if (data.cartAbandonmentRate !== undefined) {
+                    document.getElementById('cartAbandonmentRateDisplay').innerText = `${data.cartAbandonmentRate}%`;
+                }
+                 // Actualizar listas (ej. Ventas por Producto, Ventas por Región)
+                if (data.sales_by_product_list) {
+                    const salesByProductList = document.getElementById('salesByProductList');
+                    if (salesByProductList) {
+                        salesByProductList.innerHTML = ''; // Limpiar lista actual
+                        if (data.sales_by_product_list.length > 0) {
+                            data.sales_by_product_list.forEach(item => {
+                                const li = document.createElement('li');
+                                li.className = 'flex justify-between border-b py-1';
+                                li.innerHTML = `<span>${item.product_name || 'Producto #' + item.product_id}</span><span class="font-semibold bg-blue-50 text-blue-700 px-2 rounded">${item.total}</span>`;
+                                salesByProductList.appendChild(li);
+                            });
+                        } else {
+                            salesByProductList.innerHTML = '<li>No hay datos.</li>';
+                        }
+                }}
+                if (data.sales_by_region_list) {
+                    const salesByRegionList = document.getElementById('salesByRegionList');
+                    if (salesByRegionList) {
+                        salesByRegionList.innerHTML = ''; // Limpiar lista actual
+                        if (data.sales_by_region_list.length > 0) {
+                            data.sales_by_region_list.forEach(region => {
+                                const li = document.createElement('li');
+                                li.className = 'flex justify-between border-b py-1';
+                                li.innerHTML = `<span>${region.region || 'Sin región'}</span><span class="font-semibold bg-purple-50 text-purple-700 px-2 rounded">${region.total}</span>`;
+                                salesByRegionList.appendChild(li);
+                            });
+                        } else {
+                            salesByRegionList.innerHTML = '<li>No hay datos.</li>';
+                        }
+                    }
+                }
+                // Actualizar gráficos principales
+                if (window.dashboardCharts.pageLoadBar && data.averagePageLoadTime !== undefined) {
+                    window.dashboardCharts.pageLoadBar.data.datasets[0].data = [data.averagePageLoadTime];
+                    window.dashboardCharts.pageLoadBar.update();
+                }
+                if (window.dashboardCharts.bounceBar && data.bounceRate !== undefined) {
+                    window.dashboardCharts.bounceBar.data.datasets[0].data = [data.bounceRate];
+                    window.dashboardCharts.bounceBar.update();
                 }
                 // Tendencias
-                if (dashboardCharts.pageLoadTrend && data.trendPageLoad) {
-                    dashboardCharts.pageLoadTrend.data.labels = Array.from({length: data.trendPageLoad.length}, (_,i)=>'Día '+(i+1));
-                    dashboardCharts.pageLoadTrend.data.datasets[0].data = data.trendPageLoad;
-                    dashboardCharts.pageLoadTrend.update();
+                if (window.dashboardCharts.pageLoadTrend && data.trendPageLoad) {
+                    window.dashboardCharts.pageLoadTrend.data.labels = Array.from({length: data.trendPageLoad.length}, (_,i)=>'Día '+(i+1));
+                    window.dashboardCharts.pageLoadTrend.data.datasets[0].data = data.trendPageLoad;
+                    window.dashboardCharts.pageLoadTrend.update();
                 }
-                if (dashboardCharts.bounceTrend && data.trendBounceRate) {
-                    dashboardCharts.bounceTrend.data.labels = Array.from({length: data.trendBounceRate.length}, (_,i)=>'Día '+(i+1));
-                    dashboardCharts.bounceTrend.data.datasets[0].data = data.trendBounceRate;
-                    dashboardCharts.bounceTrend.update();
+                if (window.dashboardCharts.bounceTrend && data.trendBounceRate) {
+                    window.dashboardCharts.bounceTrend.data.labels = Array.from({length: data.trendBounceRate.length}, (_,i)=>'Día '+(i+1));
+                    window.dashboardCharts.bounceTrend.data.datasets[0].data = data.trendBounceRate;
+                    window.dashboardCharts.bounceTrend.update();
                 }
                 // Dispositivos
-                if (dashboardCharts.devicesPie && data.devices) {
-                    dashboardCharts.devicesPie.data.labels = Object.keys(data.devices).map(l=>l.charAt(0).toUpperCase()+l.slice(1));
-                    dashboardCharts.devicesPie.data.datasets[0].data = Object.values(data.devices);
-                    dashboardCharts.devicesPie.update();
+                if (window.dashboardCharts.devicesPie && data.devices) {
+                    window.dashboardCharts.devicesPie.data.labels = Object.keys(data.devices).map(l=>l.charAt(0).toUpperCase()+l.slice(1));
+                    window.dashboardCharts.devicesPie.data.datasets[0].data = Object.values(data.devices);
+                    window.dashboardCharts.devicesPie.update();
                 }
-            });
-    }
-    // Filtros
-    document.querySelectorAll('select[name=dateRange], select[name=deviceFilter]').forEach(el=>{
-        el.addEventListener('change', function() {
-            const filters = {
-                dateRange: document.getElementById('dateRange').value,
-                deviceFilter: document.getElementById('deviceFilter').value
-            };
-            updateDashboardData(filters);
-        });
-    });
-    // Actualización periódica
-    setInterval(()=>{
-        const filters = {
-            dateRange: document.getElementById('dateRange').value,
-            deviceFilter: document.getElementById('deviceFilter').value
-        };
-        updateDashboardData(filters);
-    }, 60000);
+                // Ventas por producto (gráfico)
+                if (window.dashboardCharts.salesByProduct && data.sales_by_product) {
+                    renderSalesByProductChart(data.sales_by_product);
+                }
+                // Ventas apiladas (gráfico)
+                if (window.dashboardCharts.salesStacked && data.sales_stacked_data) {
+                    renderSalesStackedChart(data.sales_stacked_data);
+                }
+            })
+            .catch(error => console.error('Error fetching dashboard data:', error));
+    };
+
+    // Actualización periódica (mantener o ajustar según necesidad)
+    // setInterval(()=>{
+    //     const filters = {
+    //         dateRange: document.getElementById('dateRange').value,
+    //         deviceFilter: document.getElementById('deviceFilter').value
+    //     };
+    //     window.updateDashboardData(filters);
+    // }, 60000); // Cada 1 minuto
 
     // --- Guardar preferencias de usuario (localStorage) ---
     function saveDashboardPreferences(prefs) {
@@ -285,24 +370,36 @@ document.addEventListener('DOMContentLoaded', function () {
             return JSON.parse(localStorage.getItem('dashboardPrefs')) || {};
         } catch { return {}; }
     }
-    function applyDashboardPreferences() {
+    window.applyDashboardPreferences = function() { // Exponer para Alpine.js o scripts externos
         const prefs = loadDashboardPreferences();
         document.querySelectorAll('[data-metric-section]').forEach(section => {
             const key = section.getAttribute('data-metric-section');
             if (prefs[key] === false) {
-                section.style.display = 'none';
+                // Si la preferencia es false, colapsa la sección
+                const alpineData = section.__alpine_get_listeners && section.__alpine_get_listeners().length > 0 ? Alpine.raw(section.__alpine_get_listeners()[0].node) : null;
+                if (alpineData && alpineData.open !== undefined) {
+                    alpineData.open = false; // Intenta usar la propiedad 'open' de Alpine
+                } else {
+                    section.style.display = 'none'; // Fallback si no hay Alpine o 'open'
+                }
             } else {
-                section.style.display = '';
+                const alpineData = section.__alpine_get_listeners && section.__alpine_get_listeners().length > 0 ? Alpine.raw(section.__alpine_get_listeners()[0].node) : null;
+                if (alpineData && alpineData.open !== undefined) {
+                    alpineData.open = true; // Intenta usar la propiedad 'open' de Alpine
+                } else {
+                    section.style.display = ''; // Fallback si no hay Alpine o 'open'
+                }
             }
         });
     }
-    // UI de personalización
+    // UI de personalización (si la quieres visible/configurable)
     let prefsPanel = null;
     function openPrefsPanel() {
         if (prefsPanel) { prefsPanel.remove(); prefsPanel = null; return; }
         prefsPanel = document.createElement('div');
         prefsPanel.className = 'absolute z-50 bg-white border rounded shadow p-4 right-4 top-24';
         prefsPanel.innerHTML = `<div class='font-bold mb-2'>Personaliza tu Dashboard</div>
+            <label class='block'><input type='checkbox' data-pref-metric='marketing' checked> Métricas de Marketing</label>
             <label class='block'><input type='checkbox' data-pref-metric='performance' checked> Métricas de Rendimiento</label>
             <label class='block'><input type='checkbox' data-pref-metric='inventory' checked> Inventario</label>
             <label class='block'><input type='checkbox' data-pref-metric='clients' checked> Clientes</label>
@@ -312,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const prefs = loadDashboardPreferences();
         prefsPanel.querySelectorAll('[data-pref-metric]').forEach(cb => {
             const key = cb.getAttribute('data-pref-metric');
-            cb.checked = prefs[key] !== false;
+            cb.checked = prefs[key] !== false; // Por defecto es true si no está guardado
         });
         // Guardar
         prefsPanel.querySelector('#savePrefsBtn').onclick = function() {
@@ -321,12 +418,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 newPrefs[cb.getAttribute('data-pref-metric')] = cb.checked;
             });
             saveDashboardPreferences(newPrefs);
-            applyDashboardPreferences();
+            window.applyDashboardPreferences(); // Re-apply all preferences after saving
             prefsPanel.remove();
             prefsPanel = null;
         };
     }
-    // Botón principal
+    // Botón principal de personalización (asegúrate de que exista este botón en tu HTML)
     const customizeBtn = document.querySelector('button[title^="Personalizar"]');
     if (customizeBtn) {
         customizeBtn.addEventListener('click', function(e) {
@@ -334,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
             openPrefsPanel();
         });
     }
-    // Botón en el menú de usuario
+    // Botón en el menú de usuario (si tienes uno)
     const customizeNavBtn = document.getElementById('dashboardCustomizeNavBtn');
     if (customizeNavBtn) {
         customizeNavBtn.addEventListener('click', function(e) {
@@ -342,6 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
             openPrefsPanel();
         });
     }
-    applyDashboardPreferences();
 
+    // Aplicar preferencias al cargar
+    window.applyDashboardPreferences();
 });
