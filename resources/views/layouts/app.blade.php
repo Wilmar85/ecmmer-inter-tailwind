@@ -65,12 +65,29 @@
     </a>
 
     {{-- CAMBIO AQUÍ: Se eliminó style="display: none;" --}}
-    <div x-data="{ showCookieBanner: localStorage.getItem('cookieAccepted') === null }" x-show="showCookieBanner" x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-y-full"
-        x-transition:enter-end="opacity-100 transform translate-y-0"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 transform translate-y-0"
-        x-transition:leave-end="opacity-0 transform translate-y-full"
+    <div x-data="{ 
+            showCookieBanner: true,
+            init() {
+                // Verificar localStorage al inicio
+                const accepted = localStorage.getItem('cookieAccepted');
+                if (accepted === 'accepted' || accepted === 'rejected') {
+                    this.showCookieBanner = false;
+                }
+            },
+            handleAccept() {
+                localStorage.setItem('cookieAccepted', 'accepted');
+                this.showCookieBanner = false;
+            },
+            handleReject() {
+                localStorage.setItem('cookieAccepted', 'rejected');
+                this.showCookieBanner = false;
+            }
+        }" x-init="init()" x-show="showCookieBanner" x-cloak        x-transition:enter="transition ease-out duration-500"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
         class="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4 z-50 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
         <p class="text-sm text-center md:text-left">
             Usamos cookies para mejorar tu experiencia y cumplir la <b>Ley 1581 de 2012</b> y <b>Decreto 1377 de
@@ -78,11 +95,11 @@
                 class="underline hover:text-primary">Política de Cookies</a>.
         </p>
         <div class="flex-shrink-0 flex gap-3">
-            <button @click="localStorage.setItem('cookieAccepted', '1'); showCookieBanner = false"
-                class="bg-primary hover:bg-yellow-500 text-dark-text font-bold py-2 px-4 rounded-full transition-colors">
+            <button @click="handleAccept()"
+                class="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-full transition-colors">
                 Aceptar
             </button>
-            <button @click="localStorage.setItem('cookieAccepted', '0'); showCookieBanner = false"
+            <button @click="handleReject()"
                 class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition-colors">
                 Rechazar
             </button>

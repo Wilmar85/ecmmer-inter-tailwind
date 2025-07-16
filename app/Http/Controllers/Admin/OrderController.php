@@ -64,8 +64,14 @@ class OrderController extends Controller
             'status' => 'required|string', // Ajusta la validación si es necesario
         ]);
 
-        $order->status = $request->input('status');
+        $previousStatus = $order->status;
+        $newStatus = $request->input('status');
+
+        $order->status = $newStatus;
         $order->save();
+
+        // Enviar correo de notificación
+        \Mail::to($order->user->email)->send(new \App\Mail\OrderStatusNotification($order, $previousStatus, $newStatus));
 
         return redirect()->route('admin.orders.index')->with('success', 'Estado de la orden actualizado correctamente.');
     }

@@ -465,26 +465,26 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
                 <!-- Resumen del Pedido -->
                 <div class="order-1 md:order-2 md:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 md:sticky md:top-28">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Resumen del Pedido</h3>
+                        <h3 class="text-xl font-bold text-dark-text mb-4 border-b pb-2">Resumen del Pedido</h3>
                         <div class="space-y-4">
                             @foreach($cartItems as $item)
                             <div class="flex justify-between items-center py-2 border-b">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">{{ $item->product->name }}</p>
-                                    <p class="text-sm text-gray-500">Cantidad: {{ $item->quantity }}</p>
+                                    <p class="text-sm font-medium text-dark-text">{{ $item->product->name }}</p>
+                                    <p class="text-xs text-light-text">Cantidad: {{ $item->quantity }}</p>
                                 </div>
-                                <p class="text-sm font-medium text-gray-900">${{ number_format($item->subtotal, 2) }}</p>
+                                <span class="text-sm font-medium text-dark-text">${{ number_format($item->subtotal, 2) }}</span>
                             </div>
                             @endforeach
 
                             <div class="border-t pt-4 space-y-2">
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-gray-600">Subtotal</span>
-                                    <span class="font-medium">${{ number_format($subtotal, 2) }}</span>
+                                    <span class="text-sm text-light-text">Subtotal</span>
+                                    <span class="font-medium text-dark-text">${{ number_format($subtotal, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-gray-600">IVA (19%)</span>
-                                    <span class="font-medium">${{ number_format($subtotal * 0.19, 2) }}</span>
+                                    <span class="text-sm text-light-text">IVA (19%)</span>
+                                    <span class="font-medium text-dark-text">${{ number_format($subtotal * 0.19, 2) }}</span>
                                 </div>
                                 <div class="flex justify-between text-sm">
                                     <span class="text-gray-600">Envío</span>
@@ -492,7 +492,7 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
                                         <input type="hidden" name="shipping_cost" id="shipping-cost-input" value="{{ $shipping }}">
                                         <span id="shipping-cost" class="font-medium mr-2">${{ number_format($shipping, 2) }}</span>
                                         <button type="button" id="edit-shipping-btn" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-dark-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
@@ -501,17 +501,17 @@ document.addEventListener('DOMContentLoaded', updateCheckoutFields);
                                 <div id="shipping-edit-container" class="hidden mt-2">
                                     <div class="flex items-center">
                                         <input type="number" id="manual-shipping-input" class="w-24 px-2 py-1 border border-gray-300 rounded-md text-sm" min="0" step="100">
-                                        <button type="button" id="save-shipping-btn" class="ml-2 px-2 py-1 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                                        <button type="button" id="save-shipping-btn" class="ml-2 px-2 py-1 bg-primary text-dark-text text-sm rounded-md hover:bg-primary/90">
                                             Guardar
                                         </button>
-                                        <button type="button" id="cancel-shipping-edit" class="ml-2 px-2 py-1 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300">
+                                        <button type="button" id="cancel-shipping-edit" class="ml-2 px-2 py-1 bg-gray-200 text-dark-text text-sm rounded-md hover:bg-gray-300">
                                             Cancelar
                                         </button>
                                     </div>
                                 </div>
                                 <div class="flex justify-between text-base font-medium">
-                                    <span class="text-gray-900">Total</span>
-                                    <span id="total-amount" class="text-gray-900">${{ number_format($total, 2) }}</span>
+                                    <span class="text-base font-semibold text-dark-text">Total</span>
+                                    <span id="total-amount" class="text-base font-semibold text-dark-text">${{ number_format($total, 2) }}</span>
                                 </div>
                             </div>
                         </div>

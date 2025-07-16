@@ -24,10 +24,50 @@
 
     <section class="relative h-[90vh] flex items-end justify-start text-white overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full z-0">
-            <video class="w-full h-full object-cover" autoplay loop muted playsinline>
-                <source src="{{ asset('videos/banner-video.mp4') }}" type="video/mp4">
-                Tu navegador no soporta videos HTML5.
-            </video>
+            <!-- Contenedor del video -->
+            <div id="video-container" class="w-full h-full">
+                <!-- Imagen de carga -->
+                <div id="loading-screen" class="w-full h-full bg-gray-900 flex items-center justify-center">
+                    <div class="text-white text-center">
+                        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-white mb-4"></div>
+                        <p class="text-xl">Cargando video...</p>
+                    </div>
+                </div>
+                <!-- Video que se cargará dinámicamente -->
+                <video id="banner-video" class="w-full h-full object-cover hidden" 
+                       autoplay loop muted playsinline
+                       preload="metadata"
+                       poster="{{ asset('images/video-poster.jpg') }}">
+                    <source src="{{ asset('videos/banner-video.mp4') }}" type="video/mp4">
+                    Tu navegador no soporta videos HTML5.
+                </video>
+            </div>
+            
+            <!-- Script para manejar la carga del video -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const video = document.getElementById('banner-video');
+                    const loadingScreen = document.getElementById('loading-screen');
+                    
+                    // Configurar el video para cargar solo los metadatos inicialmente
+                    video.addEventListener('loadedmetadata', function() {
+                        // Mostrar el video y ocultar la pantalla de carga
+                        video.classList.remove('hidden');
+                        loadingScreen.classList.add('hidden');
+                        
+                        // Intentar reproducir el video
+                        video.play().catch(error => {
+                            console.error('Error al reproducir el video:', error);
+                            // Si hay error, mostrar un mensaje alternativo
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'w-full h-full bg-gray-900 flex items-center justify-center text-white';
+                            errorDiv.innerHTML = '<p class="text-xl">No se pudo cargar el video. Disculpa las molestias.</p>';
+                            loadingScreen.parentNode.insertBefore(errorDiv, loadingScreen);
+                            loadingScreen.remove();
+                        });
+                    });
+                });
+            </script>
             <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
         </div>
         <div class="relative z-10 text-left p-8 md:p-16 max-w-3xl">

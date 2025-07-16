@@ -3,13 +3,17 @@
 import './bootstrap';
 import '../sass/main.scss';
 
-// SOLUCIÓN ERROR 1: Importa Chart.js para que se cargue y exponga globalmente.
-// No uses "import Chart from 'chart.js';" para evitar el error de default export.
-import 'chart.js'; 
+// Importar Chart.js y registrar los componentes necesarios
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+window.Chart = Chart; 
 
 import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse';
 
 window.Alpine = Alpine;
+
+Alpine.plugin(collapse);
 
 Alpine.start();
 

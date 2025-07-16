@@ -1,0 +1,220 @@
+DOCUMENTACIÓN DEL PANEL DE ADMINISTRACIÓN
+E-commerce InterEleticosf&A
+
+========================================
+INFORMACIÓN DE ACCESO AL SISTEMA
+========================================
+
+CREDENCIALES DE ADMINISTRADOR:
+- URL de Acceso: /admin/login
+- Correo Electrónico: admin@ecomer-web.com
+- Contraseña: admin123
+
+CREDENCIALES DE CLIENTE DEMO:
+- URL de Acceso: /login
+- Correo Electrónico: cliente@ecomer-web.com
+- Contraseña: cliente123
+
+========================================
+TABLA DE CONTENIDOS
+========================================
+1. Inicio de Sesión
+2. Panel de Control
+3. Gestión de Productos
+   3.1 Listado de Productos
+   3.2 Añadir Nuevo Producto
+   3.3 Editar Producto
+   3.4 Eliminar Producto
+4. Gestión de Categorías
+   4.1 Listado de Categorías
+   4.2 Añadir Nueva Categoría
+   4.3 Gestionar Subcategorías
+5. Gestión de Pedidos
+   5.1 Listado de Pedidos
+   5.2 Detalle del Pedido
+   5.3 Actualizar Estado del Pedido
+6. Gestión de Usuarios
+   6.1 Listado de Usuarios
+   6.2 Ver Detalles del Usuario
+   6.3 Editar Usuario
+7. Estadísticas y Reportes
+   7.1 Reporte de Ventas
+   7.2 Exportar Datos
+8. Consideraciones de Seguridad
+9. Soporte Técnico
+
+========================================
+1. INICIO DE SESIÓN
+========================================
+Para acceder al panel de administración:
+1. Abra su navegador web
+2. Ingrese la URL: /admin/login
+3. Introduzca sus credenciales de acceso
+4. Haga clic en "Iniciar Sesión"
+
+Nota: Asegúrese de estar utilizando un navegador actualizado para la mejor experiencia.
+
+========================================
+2. PANEL DE CONTROL
+========================================
+El panel de control muestra un resumen general de la tienda con las siguientes métricas:
+- Ingresos totales
+- Ventas por producto (top 10)
+- Ventas por región
+- Valor promedio de pedido
+- Tasa de conversión
+- Tasa de abandono de carrito
+- Número total de clientes
+- Nuevos clientes (últimos 30 días)
+
+========================================
+3. GESTIÓN DE PRODUCTOS
+========================================
+3.1 LISTADO DE PRODUCTOS
+- Acceda a: /admin/products
+- Visualice todos los productos con información básica
+- Busque productos por nombre, categoría o SKU
+- Ordene productos por diferentes criterios
+
+3.2 AÑADIR NUEVO PRODUCTO
+1. Haga clic en "Añadir Producto"
+2. Complete el formulario con:
+   - Nombre del producto
+   - Descripción detallada
+   - Precio y precio de oferta (opcional)
+   - Categoría y subcategoría
+   - Stock disponible
+   - SKU (código único)
+   - Estado (activo/inactivo)
+3. Suba imágenes del producto
+4. Guarde los cambios
+
+3.3 EDITAR PRODUCTO
+1. En el listado de productos, haga clic en "Editar"
+2. Modifique la información necesaria
+3. Actualice las imágenes si es necesario
+4. Guarde los cambios
+
+3.4 ELIMINAR PRODUCTO
+1. En el listado de productos, haga clic en "Eliminar"
+2. Confirme la eliminación
+
+========================================
+4. GESTIÓN DE CATEGORÍAS
+========================================
+4.1 LISTADO DE CATEGORÍAS
+- Acceda a: /admin/categories
+- Visualice todas las categorías existentes
+- Vea la cantidad de productos por categoría
+
+4.2 AÑADIR NUEVA CATEGORÍA
+1. Haga clic en "Añadir Categoría"
+2. Complete el formulario con:
+   - Nombre de la categoría
+   - Descripción
+   - Imagen representativa
+   - Estado (activo/inactivo)
+3. Guarde los cambios
+
+4.3 GESTIONAR SUBCATEGORÍAS
+1. Acceda a: /admin/subcategories
+2. Añada, edite o elimine subcategorías
+3. Asocie cada subcategoría a una categoría principal
+
+========================================
+5. GESTIÓN DE PEDIDOS
+========================================
+5.1 LISTADO DE PEDIDOS
+- Acceda a: /admin/orders
+- Visualice todos los pedidos con su estado actual
+- Filtre por estado, fecha o número de pedido
+- Ordene por fecha o monto
+
+5.2 DETALLE DEL PEDIDO
+1. Haga clic en un número de pedido
+2. Visualice:
+   - Información del cliente
+   - Productos solicitados
+   - Dirección de envío
+   - Historial de estados
+   - Información de pago
+
+5.3 ACTUALIZAR ESTADO DEL PEDIDO
+1. En el detalle del pedido, busque la sección "Actualizar Estado"
+2. Seleccione el nuevo estado:
+   - Pendiente
+   - Procesando
+   - Enviado
+   - Entregado
+   - Cancelado
+3. Agregue un comentario (opcional)
+4. Haga clic en "Actualizar Estado"
+
+========================================
+6. GESTIÓN DE USUARIOS
+========================================
+6.1 LISTADO DE USUARIOS
+- Acceda a: /admin/users
+- Visualice todos los usuarios registrados
+- Filtre por rol o estado
+
+6.2 VER DETALLES DEL USUARIO
+1. Haga clic en un usuario
+2. Visualice:
+   - Información personal
+   - Historial de pedidos
+   - Direcciones guardadas
+   - Actividad reciente
+
+6.3 EDITAR USUARIO
+1. En el listado de usuarios, haga clic en "Editar"
+2. Modifique la información necesaria
+3. Actualice el rol si es necesario
+4. Guarde los cambios
+
+========================================
+7. ESTADÍSTICAS Y REPORTES
+========================================
+7.1 REPORTE DE VENTAS
+- Acceda al panel de control
+- Visualice gráficos de:
+  - Ventas por período
+  - Productos más vendidos
+  - Ingresos por categoría
+  - Tendencias de ventas
+
+7.2 EXPORTAR DATOS
+1. En cualquier sección de listado (productos, pedidos, usuarios)
+2. Haga clic en "Exportar"
+3. Seleccione el formato (CSV, Excel)
+4. Descargue el archivo generado
+
+========================================
+8. CONSIDERACIONES DE SEGURIDAD
+========================================
+1. Cambie las contraseñas predeterminadas después del primer inicio de sesión
+2. No comparta las credenciales de administrador
+3. Utilice contraseñas seguras que incluyan mayúsculas, minúsculas, números y caracteres especiales
+4. Cierre la sesión cuando termine de usar el panel de administración
+5. Mantenga el sistema actualizado con las últimas versiones
+6. Realice copias de seguridad periódicas de la base de datos
+
+========================================
+9. SOPORTE TÉCNICO
+========================================
+Para asistencia técnica o preguntas sobre el uso del panel de administración, contacte al equipo de soporte en:
+
+- Correo Electrónico: soporte@interelectricosfa.com
+- Teléfono: [Número de soporte]
+- Horario de Atención: Lunes a Viernes de 9:00 AM a 6:00 PM
+
+========================================
+INFORMACIÓN ADICIONAL
+========================================
+- Documento generado el: 15 de Julio de 2025
+- Versión del Sistema: 1.0.0
+- Última Actualización: 15/07/2025
+
+Nota: Este documento contiene información confidencial. Por favor, guárdelo en un lugar seguro.
+
+© 2025 InterEleticosf&A. Todos los derechos reservados.

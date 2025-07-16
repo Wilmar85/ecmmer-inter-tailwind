@@ -1,0 +1,224 @@
+MANUAL DEL USUARIO FINAL
+TIENDA EN LÍNEA INTERELÉCTRICOSF&A
+
+========================================
+TABLA DE CONTENIDOS
+========================================
+1. Introducción
+2. Registro e Inicio de Sesión
+3. Navegación por la Tienda
+4. Búsqueda de Productos
+5. Gestión del Carrito de Compras
+6. Proceso de Compra
+7. Seguimiento de Pedidos
+8. Gestión de Cuenta de Usuario
+9. Preguntas Frecuentes (FAQ)
+10. Contacto y Soporte
+
+========================================
+1. INTRODUCCIÓN
+========================================
+Bienvenido a InterEleticosf&A, tu tienda en línea de confianza para productos de calidad. Este manual te guiará a través de todas las funcionalidades de nuestra plataforma para que puedas realizar tus compras de manera fácil y segura.
+
+========================================
+2. REGISTRO E INICIO DE SESIÓN
+========================================
+2.1 CREAR UNA CUENTA
+1. Haga clic en "Registrarse" en la esquina superior derecha
+2. Complete el formulario con sus datos personales
+3. Acepte los términos y condiciones
+4. Haga clic en "Crear cuenta"
+5. Recibirá un correo de confirmación (revise su carpeta de spam si no lo ve en la bandeja de entrada)
+
+2.2 INICIAR SESIÓN
+1. Haga clic en "Iniciar Sesión"
+2. Ingrese su correo electrónico y contraseña
+3. Haga clic en "Iniciar Sesión"
+4. Si olvidó su contraseña, haga clic en "¿Olvidó su contraseña?"
+
+========================================
+3. NAVEGACIÓN POR LA TIENDA
+========================================
+3.1 PÁGINA DE INICIO
+- Carrusel de ofertas destacadas
+- Categorías principales
+- Productos más vendidos
+- Ofertas especiales
+
+3.2 MENÚ PRINCIPAL
+- Inicio: Regresa a la página principal
+- Categorías: Explora productos por categoría
+- Ofertas: Productos en descuento
+- Nuevos: Productos recién agregados
+- Contacto: Información de contacto
+
+3.3 PIE DE PÁGINA
+- Enlaces rápidos
+- Información de contacto
+- Redes sociales
+- Términos y condiciones
+- Políticas de privacidad
+
+========================================
+4. BÚSQUEDA DE PRODUCTOS
+========================================
+4.1 BÚSQUEDA BÁSICA
+1. Escriba el nombre del producto en la barra de búsqueda
+2. Presione Enter o haga clic en el ícono de búsqueda
+3. Los resultados se mostrarán en orden de relevancia
+
+4.2 FILTROS AVANZADOS
+- Precio: Deslice para establecer un rango de precios
+- Categoría: Filtre por categoría de producto
+- Marca: Seleccione marcas específicas
+- Valoración: Filtre por calificación de estrellas
+- Disponibilidad: Muestre solo productos en stock
+
+4.3 ORDENAR RESULTADOS
+- Más relevantes
+- Precio: de menor a mayor
+- Precio: de mayor a menor
+- Mejor valorados
+- Más recientes
+
+========================================
+5. GESTIÓN DEL CARRITO DE COMPRAS
+========================================
+5.1 AÑADIR PRODUCTOS AL CARRITO
+1. Navegue hasta el producto deseado
+2. Seleccione la cantidad
+3. Haga clic en "Añadir al carrito"
+4. Puede seguir comprando o ir al carrito
+
+5.2 VER Y EDITAR EL CARRITO
+1. Haga clic en el ícono del carrito
+2. Para cambiar la cantidad, modifique el número y haga clic en actualizar
+3. Para eliminar un producto, haga clic en la X
+4. Los totales se actualizarán automáticamente
+
+5.3 CUPONES DE DESCUENTO
+1. En el carrito, busque el campo "Cupón de descuento"
+2. Ingrese el código del cupón
+3. Haga clic en "Aplicar"
+4. El descuento se aplicará al total
+
+========================================
+6. PROCESO DE COMPRA
+========================================
+6.1 PASO 1: REVISIÓN DEL CARRITO
+1. Verifique los productos y cantidades
+2. Asegúrese de que se hayan aplicado los descuentos
+3. Haga clic en "Proceder al pago"
+
+6.2 PASO 2: INFORMACIÓN DE ENVÍO
+1. Si ya está registrado, ingrese sus credenciales
+2. Si es nuevo, complete el formulario de registro rápido
+3. Verifique o ingrese la dirección de envío
+4. Seleccione el método de envío
+5. Haga clic en "Continuar"
+
+6.3 PASO 3: MÉTODO DE PAGO
+1. Seleccione su método de pago preferido
+   - Tarjeta de crédito/débito
+   - Pago contra entrega
+   - Transferencia bancaria
+2. Complete la información de pago
+3. Revise el resumen del pedido
+4. Acepte los términos y condiciones
+5. Haga clic en "Realizar pedido"
+
+6.4 CONFIRMACIÓN
+- Recibirá un correo electrónico de confirmación
+- El número de pedido se mostrará en pantalla
+- Puede hacer seguimiento del pedido desde su cuenta
+
+========================================
+7. SEGUIMIENTO DE PEDIDOS
+========================================
+7.1 VER ESTADO DEL PEDIDO
+1. Inicie sesión en su cuenta
+2. Vaya a "Mis pedidos"
+3. Busque el pedido en la lista
+4. Haga clic en "Ver detalle"
+
+7.2 ESTADOS DEL PEDIDO
+- Pendiente: Su pedido ha sido recibido
+- Procesando: Estamos preparando su pedido
+- Enviado: Su pedido está en camino
+- Entregado: Pedido completado
+- Cancelado: Pedido cancelado
+
+7.3 DEVOLUCIONES Y REEMBOLSOS
+1. Vaya a "Mis pedidos"
+2. Seleccione el pedido
+3. Haga clic en "Solicitar devolución"
+4. Complete el formulario
+5. Siga las instrucciones para el envío de devolución
+
+========================================
+8. GESTIÓN DE CUENTA DE USUARIO
+========================================
+8.1 MI PERFIL
+- Ver y editar información personal
+- Cambiar contraseña
+- Preferencias de comunicación
+
+8.2 DIRECCIONES GUARDADAS
+- Agregar nueva dirección
+- Editar dirección existente
+- Establecer dirección por defecto
+- Eliminar dirección
+
+8.3 HISTORIAL DE PEDIDOS
+- Ver todos los pedidos anteriores
+- Detalles de cada pedido
+- Volver a pedir
+- Descargar factura
+
+8.4 LISTAS DE DESEOS
+- Crear nueva lista
+- Añadir productos a listas existentes
+- Compartir lista de deseos
+- Eliminar listas
+
+========================================
+9. PREGUNTAS FRECUENTES (FAQ)
+========================================
+Q: ¿Cuáles son los métodos de pago aceptados?
+R: Aceptamos tarjetas de crédito/débito, transferencias bancarias y pago contra entrega.
+
+Q: ¿Cuál es el tiempo de entrega?
+R: El tiempo de entrega varía según la ubicación, generalmente de 2 a 5 días hábiles.
+
+Q: ¿Puedo cambiar mi pedido después de realizado?
+R: Los pedidos pueden modificarse dentro de la primera hora después de realizado el pedido.
+
+Q: ¿Cómo sé si un producto está disponible?
+R: Los productos disponibles muestran "En stock" en la página del producto.
+
+Q: ¿Ofrecen garantía en los productos?
+R: Sí, todos nuestros productos tienen garantía de fábrica. Consulte los términos específicos de cada producto.
+
+========================================
+10. CONTACTO Y SOPORTE
+========================================
+Si necesita ayuda, puede contactarnos por:
+
+- Chat en línea: Disponible en el sitio web
+- Correo electrónico: soporte@interelectricosfa.com
+- Teléfono: [Número de soporte]
+- Redes sociales: @InterEleticosfA
+
+Horario de atención:
+Lunes a Viernes: 9:00 AM - 6:00 PM
+Sábados: 9:00 AM - 2:00 PM
+
+========================================
+INFORMACIÓN ADICIONAL
+========================================
+- Documento actualizado: 15 de Julio de 2025
+- Versión: 1.0.0
+
+© 2025 InterEleticosf&A. Todos los derechos reservados.
+
+Nota: Este manual está sujeto a actualizaciones. Visite nuestra página web para la versión más reciente.

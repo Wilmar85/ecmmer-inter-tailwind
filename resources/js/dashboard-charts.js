@@ -15,11 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Configuración global de Chart.js para soporte de modo oscuro
     function applyChartTheme() {
         const chartTextColor = getComputedStyle(document.documentElement).getPropertyValue('--chart-text') || '#1e293b';
-        Chart.defaults.color = chartTextColor;
-        // Podrías necesitar actualizar colores de legendas/tooltips si no se heredan
-        Chart.defaults.plugins.legend.labels.color = chartTextColor;
-        Chart.defaults.plugins.tooltip.titleColor = chartTextColor;
-        Chart.defaults.plugins.tooltip.bodyColor = chartTextColor;
+        Chart.defaults.set('color', chartTextColor);
+        Chart.defaults.set('plugins.legend.labels.color', chartTextColor);
+        Chart.defaults.set('plugins.tooltip.titleColor', chartTextColor);
+        Chart.defaults.set('plugins.tooltip.bodyColor', chartTextColor);
     }
     applyChartTheme(); // Aplicar al cargar
     // Escuchar cambios en el tema (si tienes un observador de mutaciones o un evento de tema)
