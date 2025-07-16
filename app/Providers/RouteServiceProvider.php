@@ -20,6 +20,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/admin.php'));
 
+            // Cargar rutas de soporte
+            Route::middleware('web')
+                ->group(base_path('routes/support.php'));
+
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));

@@ -92,6 +92,12 @@ class DashboardController extends Controller
         // Tasa de adquisición: nuevos clientes / total clientes (últimos 30 días)
         $acquisitionRate = $totalCustomers > 0 ? round($newCustomers / $totalCustomers * 100, 2) : null;
 
+        // Tickets de soporte recientes
+        $recentTickets = \App\Models\SupportTicket::with(['user', 'latestResponse'])
+            ->latest()
+            ->limit(5)
+            ->get();
+
         // Google Analytics: tráfico y fuentes
         $trafficSummary = null;
         $trafficSources = null;
@@ -165,7 +171,8 @@ class DashboardController extends Controller
             'averagePageLoadTime',
             'bounceRate',
             'averageSessionDuration',
-            'devices'
+            'devices',
+            'recentTickets'
         ));
     }
 

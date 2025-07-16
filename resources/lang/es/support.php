@@ -1,0 +1,73 @@
+<?php
+
+return [
+    'status' => [
+        'open' => 'Abierto',
+        'in_progress' => 'En Progreso',
+        'awaiting_response' => 'Esperando Respuesta',
+        'resolved' => 'Resuelto',
+        'closed' => 'Cerrado',
+    ],
+    'priority' => [
+        'low' => 'Baja',
+        'medium' => 'Media',
+        'high' => 'Alta',
+        'urgent' => 'Urgente',
+    ],
+    'messages' => [
+        'ticket_created' => 'Ticket creado exitosamente. Número de referencia: :reference',
+        'response_sent' => 'Respuesta enviada correctamente',
+        'status_updated' => 'Estado del ticket actualizado correctamente',
+        'ticket_closed' => 'El ticket ha sido cerrado',
+        'rating_submitted' => '¡Gracias por calificar nuestro servicio!',
+        'rating_updated' => 'Calificación actualizada correctamente',
+        'rating_deleted' => 'Calificación eliminada correctamente',
+    ],
+    'ratings' => [
+        'title' => 'Calificar Atención',
+        'your_rating' => 'Tu calificación',
+        'comment' => 'Comentario (opcional)',
+        'submit' => 'Enviar Calificación',
+        'update' => 'Actualizar Calificación',
+        'delete' => 'Eliminar Calificación',
+        'delete_confirm' => '¿Estás seguro de que deseas eliminar tu calificación?',
+        'thanks' => '¡Gracias por tu calificación!',
+        'already_rated' => 'Ya has calificado este ticket',
+        'not_rated' => 'Aún no has calificado este ticket',
+    ],
+    'validation' => [
+        'content_required' => 'El campo de respuesta es obligatorio',
+        'attachments_max' => 'No se pueden adjuntar más de :max archivos',
+        'file_too_large' => 'El archivo es demasiado grande. El tamaño máximo permitido es :size MB',
+        'invalid_file_type' => 'Tipo de archivo no permitido. Solo se permiten: :types',
+    ],
+    'email' => [
+        'ticket_created' => [
+            'subject' => 'Nuevo Ticket de Soporte #:reference',
+            'greeting' => '¡Hola :name!',
+            'line1' => 'Hemos recibido tu solicitud de soporte con el número de referencia **#:reference**.',
+            'line2' => '**Asunto:** :subject',
+            'line3' => 'Nuestro equipo revisará tu consulta y te responderá lo antes posible.',
+            'action' => 'Ver Ticket',
+            'salutation' => 'Saludos,<br>:app_name',
+        ],
+        'ticket_response' => [
+            'subject' => 'Nueva respuesta en tu ticket #:reference',
+            'greeting' => '¡Hola :name!',
+            'line1' => 'Has recibido una nueva respuesta en tu ticket de soporte **#:reference**.',
+            'line2' => '**Asunto:** :subject',
+            'line3' => '**Respuesta:**',
+            'action' => 'Ver Respuesta',
+            'salutation' => 'Saludos,<br>:app_name',
+        ],
+        'ticket_closed' => [
+            'subject' => 'Ticket Cerrado #:reference',
+            'greeting' => '¡Hola :name!',
+            'line1' => 'Tu ticket de soporte **#:reference** ha sido cerrado.',
+            'line2' => '**Asunto:** :subject',
+            'line3' => 'Si necesitas más ayuda, no dudes en crear un nuevo ticket de soporte.',
+            'action' => 'Ver Ticket',
+            'salutation' => 'Gracias por confiar en nosotros,<br>:app_name',
+        ],
+    ],
+];

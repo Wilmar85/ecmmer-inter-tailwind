@@ -1,0 +1,318 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Detalles del Ticket') }}
+            </h2>
+            <a href="{{ route('support.tickets.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                {{ __('Volver') }}
+            </a>
+        </div>
+    </x-slot>
+
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <!-- Encabezado del ticket -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    {{ $ticket->subject }}
+                                    <span class="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {{ 
+                                            $ticket->status === 'open' ? 'bg-green-100 text-green-800' : 
+                                            ($ticket->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 
+                                            ($ticket->status === 'resolved' ? 'bg-purple-100 text-purple-800' : 
+                                            ($ticket->status === 'closed' ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800'))) 
+                                        }}">
+                                        {{ __('support.status.' . $ticket->status) }}
+                                    </span>
+                                </h3>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                    {{ __('Referencia') }}: #{{ $ticket->reference_number }} | 
+                                    {{ __('Creado') }}: {{ $ticket->created_at->format('d M Y, H:i') }}
+                                </p>
+                            </div>
+                            @if($ticket->status !== 'closed')
+                                <div class="flex flex-wrap gap-2">
+                                    @can('update', $ticket)
+                                        @if(!in_array($ticket->status, ['resolved', 'closed']))
+                                            <form action="{{ route('support.tickets.update-status', $ticket) }}" method="POST" class="inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="resolved">
+                                                <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                    {{ __('Marcar como resuelto') }}
+                                                </button>
+                                            </form>
+                                        @endif
+                        
+                                        @if($ticket->status !== 'closed')
+                                            <form action="{{ route('support.tickets.update-status', $ticket) }}" method="POST" class="inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="closed">
+                                                <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    {{ __('Cerrar ticket') }}
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endcan
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Contenido principal -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:px-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                {{ __('Detalles del ticket') }}
+                            </h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                {{ __('Información detallada sobre este ticket de soporte.') }}
+                            </p>
+                        </div>
+                        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                            <dl class="sm:divide-y sm:divide-gray-200">
+                                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt class="text-sm font-medium text-gray-500">
+                                        {{ __('Categoría') }}
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        {{ $ticket->category ? $ticket->category->name : __('Sin categoría') }}
+                                    </dd>
+                                </div>
+                                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt class="text-sm font-medium text-gray-500">
+                                        {{ __('Prioridad') }}
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {{ 
+                                                $ticket->priority === 'low' ? 'bg-green-100 text-green-800' : 
+                                                ($ticket->priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 
+                                                ($ticket->priority === 'high' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800')) 
+                                            }}">
+                                            {{ __('support.priority.' . $ticket->priority) }}
+                                        </span>
+                                    </dd>
+                                </div>
+                                <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                    <dt class="text-sm font-medium text-gray-500">
+                                        {{ __('Descripción') }}
+                                    </dt>
+                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 whitespace-pre-line">
+                                        {{ $ticket->description }}
+                                    </dd>
+                                </div>
+                                @if($ticket->attachments->count() > 0)
+                                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <dt class="text-sm font-medium text-gray-500">
+                                            {{ __('Archivos adjuntos') }}
+                                        </dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                            <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
+                                                @foreach($ticket->attachments as $attachment)
+                                                    <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                                        <div class="w-0 flex-1 flex items-center">
+                                                            <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            <span class="ml-2 flex-1 w-0 truncate">
+                                                                {{ $attachment->original_name }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="ml-4 flex-shrink-0">
+                                                            <a href="{{ route('support.tickets.attachment.download', $attachment) }}" class="font-medium text-blue-600 hover:text-blue-500">
+                                                                {{ __('Descargar') }}
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </dd>
+                                    </div>
+                                @endif
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Sección de respuestas -->
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:px-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                {{ __('Respuestas') }}
+                            </h3>
+                        </div>
+                        <div class="border-t border-gray-200">
+                            @forelse($ticket->responses as $response)
+                                <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="flex-shrink-0">
+                                            <img class="h-10 w-10 rounded-full" src="{{ $response->user->profile_photo_url }}" alt="{{ $response->user->name }}">
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-sm font-medium text-gray-900">
+                                                    {{ $response->user->name }}
+                                                </p>
+                                                <p class="text-xs text-gray-500">
+                                                    {{ $response->created_at->diffForHumans() }}
+                                                </p>
+                                            </div>
+                                            <div class="mt-1 text-sm text-gray-700 whitespace-pre-line">
+                                                {{ $response->content }}
+                                            </div>
+                                            @if($response->attachments->count() > 0)
+                                                <div class="mt-3">
+                                                    <span class="text-xs text-gray-500">{{ __('Archivos adjuntos') }}:</span>
+                                                    <div class="mt-1 flex flex-wrap gap-2">
+                                                        @foreach($response->attachments as $attachment)
+                                                            <a href="{{ route('support.tickets.attachment.download', $attachment) }}" class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                                <svg class="h-4 w-4 mr-1 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                                                                </svg>
+                                                                {{ $attachment->original_name }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="px-4 py-5 sm:px-6 text-center">
+                                    <p class="text-sm text-gray-500">{{ __('No hay respuestas aún.') }}</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <!-- Formulario de respuesta - Solo para administradores -->
+                    @if($ticket->status !== 'closed' && auth()->user()->isAdmin())
+                        <div class="bg-white shadow sm:rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    {{ __('Responder al ticket') }}
+                                </h3>
+                                <div class="mt-5">
+                                    <form action="{{ route('support.tickets.response', $ticket) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div>
+                                            <label for="content" class="block text-sm font-medium text-gray-700">
+                                                {{ __('Tu mensaje') }}
+                                            </label>
+                                            <div class="mt-1">
+                                                <textarea id="content" name="content" rows="4" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="{{ __('Escribe tu respuesta aquí...') }}" required></textarea>
+                                            </div>
+                                            <p class="mt-2 text-sm text-gray-500">
+                                                {{ __('Describe con detalle tu consulta o problema.') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-6">
+                                            <label class="block text-sm font-medium text-gray-700">
+                                                {{ __('Archivos adjuntos') }}
+                                            </label>
+                                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                                <div class="space-y-1 text-center">
+                                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <div class="flex text-sm text-gray-600">
+                                                        <label for="attachments" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                            <span>{{ __('Subir archivos') }}</span>
+                                                            <input id="attachments" name="attachments[]" type="file" class="sr-only" multiple>
+                                                        </label>
+                                                        <p class="pl-1">{{ __('o arrastra y suelta') }}</p>
+                                                    </div>
+                                                    <p class="text-xs text-gray-500">
+                                                        PNG, JPG, PDF {{ __('hasta') }} 10MB
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div id="file-list" class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                <!-- Aquí se mostrarán los archivos seleccionados -->
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-5">
+                                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                {{ __('Enviar respuesta') }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-yellow-700">
+                                        {{ __('Este ticket está cerrado. No puedes responder a un ticket cerrado. Si necesitas más ayuda, por favor crea un nuevo ticket.') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+    <script>
+        // Mostrar vista previa de archivos adjuntos
+        document.getElementById('attachments')?.addEventListener('change', function(e) {
+            const files = e.target.files;
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            
+            Array.from(files).forEach(file => {
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convertir a MB
+                const fileType = file.type.split('/')[0]; // Obtener el tipo de archivo (image, application, etc.)
+                
+                let icon = '';
+                if (fileType === 'image') {
+                    icon = `<svg class="h-10 w-10 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>`;
+                } else if (fileType === 'application' && file.type.includes('pdf')) {
+                    icon = `<svg class="h-10 w-10 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>`;
+                } else {
+                    icon = `<svg class="h-10 w-10 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>`;
+                }
+                
+                const fileElement = document.createElement('div');
+                fileElement.className = 'relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3';
+                fileElement.innerHTML = `
+                    <div class="flex-shrink-0">
+                        ${icon}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">${file.name}</p>
+                        <p class="text-sm text-gray-500 truncate">${fileSize} MB</p>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileElement);
+            });
+        });
+    </script>
+    @endpush
+</x-app-layout>

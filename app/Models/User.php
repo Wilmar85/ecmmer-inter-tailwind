@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -56,24 +56,68 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the orders for the user.
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * Get the support tickets for the user.
+     */
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * Check if the user is a customer.
+     */
+    public function isCustomer(): bool
+    {
+        return $this->role === self::ROLE_CUSTOMER;
+    }
+
+    /**
+     * Check if the user is a support agent.
+     */
+    public function isSupportAgent(): bool
+    {
+        return $this->isAdmin() || $this->role === 'support_agent';
+    }
+
+    /**
+     * Scope a query to only include support agents.
+     */
+    public function scopeSupportAgents($query)
+    {
+        return $query->whereIn('role', [self::ROLE_ADMIN, 'support_agent']);
+    }
+
+    /**
+     * Get the user's preferences.
+     */
     public function preferences()
     {
         return $this->hasOne(\App\Models\UserPreference::class);
     }
 
+    /**
+     * Get the user's shopping carts.
+     */
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role === self::ROLE_ADMIN;
     }
 
     public function getFullAddressAttribute(): string

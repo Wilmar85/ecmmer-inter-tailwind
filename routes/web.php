@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SupportTicketController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PreferenceController;
 
@@ -31,6 +32,15 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\BrandController;
+
+// Políticas y Términos
+Route::get('/politica-de-privacidad', function () {
+    return view('policies.privacy');
+})->name('privacy');
+
+Route::get('/terminos-y-condiciones', function () {
+    return view('terminos');
+})->name('terms');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
@@ -93,4 +103,16 @@ Route::get('/orders/{order}/wompi-widget', [\App\Http\Controllers\WompiControlle
 Route::get('/orders/{order}/wompi-callback', [\App\Http\Controllers\WompiController::class, 'callback'])->name('wompi.callback');
 Route::post('/webhooks/wompi', [\App\Http\Controllers\WompiController::class, 'webhook'])->name('webhooks.wompi')->middleware('api');
 
+// Ruta para verificar la base de datos
+Route::get('/test-db', [App\Http\Controllers\TestController::class, 'checkDatabase']);
+
+// Ruta de prueba
+Route::get('/test-route', function () {
+    return response()->json([
+        'message' => 'Ruta de prueba funcionando correctamente',
+        'time' => now()
+    ]);
+})->name('test.route');
+
 require __DIR__.'/auth.php';
+require __DIR__.'/support.php';
