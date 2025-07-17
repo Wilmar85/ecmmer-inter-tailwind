@@ -229,10 +229,10 @@
         </div>
     </div>
 
-    <div class="bg-white py-16">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12 px-4">Nuestras Marcas de Confianza</h2>
-            <x-brand-section :brands="[
+    <!-- Sección de marcas modernas -->
+    <div class="bg-gradient-to-b from-white to-gray-50 py-16 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <x-modern-brands :brands="[
                 'MERCURY',
                 'TITANIUM',
                 'ZAFIRO',
@@ -244,7 +244,6 @@
                 'BRIOLIGH',
                 'ROYAL',
                 'LUMEK',
-                'TITANIUM',
                 'DIXTON',
                 'BAYTER',
                 'SPARKLED',

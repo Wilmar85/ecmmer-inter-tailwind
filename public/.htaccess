@@ -1,3 +1,4 @@
+# Habilitar el motor de reescritura
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -5,21 +6,121 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Redirigir HTTP a HTTPS (descomentar en producción)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Manejar encabezado de autorización
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
+    # Manejar encabezado X-XSRF-Token
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Redirigir www a no-www (o viceversa según preferencia)
+    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    # Redirigir trailing slashes si no es un directorio
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Enviar solicitudes al controlador frontal
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# Configuración de seguridad
+<IfModule mod_headers.c>
+    # Protección contra clickjacking
+    Header always append X-Frame-Options SAMEORIGIN
+    
+    # Protección XSS
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Prevenir MIME-sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Política de referencias
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Política de permisos
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # HSTS (descomentar en producción con SSL)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# Comprimir archivos
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE font/opentype font/ttf font/eot font/otf
+</IfModule>
+
+# Configuración de caché
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Imágenes
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # CSS, JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    
+    # Web fonts
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # Otros
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# Protección de archivos sensibles
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bloquear acceso a archivos específicos
+<FilesMatch "^(composer\.json|composer\.lock|package\.json|package-lock\.json|\.env|\.gitignore|\.gitattributes|README\.md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevenir listado de directorios
+Options -Indexes
+
+# Deshabilitar el seguimiento de directorios
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# Protección contra hotlinking (reemplaza tuejemplo.com con tu dominio)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?tuejemplo.com [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [NC,F,L]
 </IfModule>
