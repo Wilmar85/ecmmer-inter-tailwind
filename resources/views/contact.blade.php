@@ -53,8 +53,14 @@
                                             </path>
                                         </svg></span>
                                     <div class="ml-3">
-                                        <p class="font-semibold text-gray-800">Teléfono</p>
-                                        <p class="text-gray-600">+57 123 456 7890</p>
+                                        <p class="font-semibold text-gray-800">Teléfono / WhatsApp</p>
+                                        @php
+                                            $whatsappNumber = $user->whatsapp_number ?? '+57 123 456 7890';
+                                            $cleanNumber = preg_replace('/[^0-9+]/', '', $whatsappNumber);
+                                        @endphp
+                                        <a href="https://wa.me/{{ $cleanNumber }}" target="_blank" class="text-gray-600 hover:text-primary">
+                                            {{ $whatsappNumber }}
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="flex items-start">
@@ -65,8 +71,11 @@
                                             </path>
                                         </svg></span>
                                     <div class="ml-3">
-                                        <p class="font-semibold text-gray-800">Email</p>
-                                        <p class="text-gray-600">interelectricosaf@gmail.com</p>
+                                        <p class="font-semibold text-gray-800">Email de Contacto</p>
+                                        @php
+                                            $email = $user->customer_service_email ?? 'interelectricosaf@gmail.com';
+                                        @endphp
+                                        <a href="mailto:{{ $email }}" class="text-gray-600 hover:text-primary">{{ $email }}</a>
                                     </div>
                                 </div>
                             </div>

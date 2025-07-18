@@ -129,6 +129,20 @@
                         <div class="prose max-w-none text-gray-600">
                             <p>{{ $product->description }}</p>
                         </div>
+                        
+                        @php
+                            $businessHours = auth()->user()?->business_hours ?? 'Lunes a Viernes: 8:00 AM - 6:00 PM, Sábados: 8:00 AM - 2:00 PM';
+                        @endphp
+                        <div class="flex items-start text-sm text-gray-600 mt-2">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <span class="font-semibold">Horario de atención:</span>
+                                <span class="ml-1">{{ $businessHours }}</span>
+                            </div>
+                        </div>
+                        
                         <div class="text-sm text-gray-600">
                             <span class="font-semibold">Disponibilidad:</span>
                             @if ($product->stock > 0)

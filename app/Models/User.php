@@ -30,7 +30,13 @@ class User extends Authenticatable
         'address',
         'city',
         'state',
-        'zip_code'
+        'zip_code',
+        'customer_service_email',
+        'whatsapp_number',
+        'whatsapp_float_button',
+        'sales_email',
+        'support_email',
+        'business_hours'
     ];
 
     /**

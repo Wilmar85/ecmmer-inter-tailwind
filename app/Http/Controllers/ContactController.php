@@ -10,7 +10,8 @@ class ContactController extends Controller
     // Muestra el formulario de contacto
     public function show()
     {
-        return view('contact');
+        $user = auth()->user();
+        return view('contact', compact('user'));
     }
 
     // Procesa el envío del formulario de contacto

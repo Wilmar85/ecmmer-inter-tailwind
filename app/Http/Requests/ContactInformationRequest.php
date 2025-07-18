@@ -2,12 +2,18 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+class ContactInformationRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,17 +22,9 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
-            ],
             'customer_service_email' => ['nullable', 'email', 'max:255'],
             'whatsapp_number' => ['nullable', 'string', 'max:20'],
+            'whatsapp_float_button' => ['nullable', 'string', 'max:20'],
             'sales_email' => ['nullable', 'email', 'max:255'],
             'support_email' => ['nullable', 'email', 'max:255'],
             'business_hours' => ['nullable', 'string', 'max:255'],

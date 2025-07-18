@@ -25,8 +25,14 @@
             </div>
 
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
+                <div class="max-w-4xl">
                     @include('profile.partials.update-profile-information-form')
+                </div>
+            </div>
+
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="max-w-4xl">
+                    @include('profile.partials.update-contact-information-form')
                 </div>
             </div>
 
@@ -41,6 +47,11 @@
                     @include('profile.partials.orders-history')
                 </div>
             </div>
+            
+            {{-- Script para actualizar el botón de WhatsApp --}}
+            @if(session('update_whatsapp_script'))
+                {!! session('update_whatsapp_script') !!}
+            @endif
         </div>
     </div>
 </x-app-layout>

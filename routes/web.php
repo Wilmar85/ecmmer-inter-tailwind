@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/cart/count', [\App\Http\Controllers\CartController::class, 'cartCount'])->name('cart.count');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/contact', [ProfileController::class, 'updateContact'])->name('profile.contact.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rutas del carrito

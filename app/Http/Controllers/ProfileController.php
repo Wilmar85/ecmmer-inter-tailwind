@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\ContactInformationRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,15 +44,72 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+        
+        // Actualizar solo los campos básicos del perfil
+        $user->name = $request->name;
+        $user->email = $request->email;
+        
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+    
+    /**
+     * Update the user's contact information.
+     */
+    public function updateContact(ContactInformationRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+        
+        // Actualizar solo los campos de contacto
+        $user->customer_service_email = $request->customer_service_email;
+        $user->whatsapp_number = $request->whatsapp_number;
+        $user->whatsapp_float_button = $request->whatsapp_float_button;
+        $user->sales_email = $request->sales_email;
+        $user->support_email = $request->support_email;
+        $user->business_hours = $request->business_hours;
+        
+        $user->save();
+        
+        // Determinar qué número de WhatsApp usar para el botón flotante
+        $whatsappNumber = $request->whatsapp_float_button ?: $request->whatsapp_number;
+        
+        // Limpiar el número (solo dígitos)
+        $cleanNumber = preg_replace('/[^0-9]/', '', $whatsappNumber);
+        
+        // Actualizar la sesión con el número limpio
+        session(['whatsapp_float_number' => $cleanNumber]);
+        
+        // Forzar la escritura de la sesión inmediatamente
+        $request->session()->save();
+        
+        // También actualizar el localStorage vía JavaScript
+        $script = "<script>
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('whatsapp_float_number', '" . $cleanNumber . "');
+                console.log('Número de WhatsApp actualizado en localStorage:', '" . $cleanNumber . "');
+                
+                // Actualizar el botón si está en la página
+                const whatsappButton = document.getElementById('whatsapp-float-button');
+                if (whatsappButton) {
+                    const cleanNumber = '" . $cleanNumber . "';
+                    const whatsappUrl = 'https://wa.me/' + cleanNumber + '?text=' + encodeURIComponent('Hola, estoy interesado en sus productos.');
+                    whatsappButton.href = whatsappUrl;
+                    whatsappButton.setAttribute('data-whatsapp-number', cleanNumber);
+                    console.log('Botón de WhatsApp actualizado con el número:', cleanNumber);
+                }
+            }
+        </script>";
+
+        return Redirect::route('profile.edit')
+            ->with('status', 'contact-information-updated')
+            ->with('success', '¡La información de contacto ha sido actualizada correctamente!')
+            ->with('update_whatsapp_script', $script);
     }
 
     /**
