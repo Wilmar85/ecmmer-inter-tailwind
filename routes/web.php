@@ -14,6 +14,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PreferenceController;
 
@@ -47,6 +48,12 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 
 // Sitemap
 Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+
+// Rutas del administrador de sliders
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('sliders', AdminSliderController::class)->except(['show']);
+    Route::post('sliders/update-order', [AdminSliderController::class, 'updateOrder'])->name('sliders.update-order');
+});
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
 

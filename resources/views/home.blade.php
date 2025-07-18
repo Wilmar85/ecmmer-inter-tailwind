@@ -22,142 +22,40 @@
 
 <x-app-layout>
 
-    <section class="relative h-[90vh] flex items-end justify-start text-white overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full z-0">
-            <!-- Contenedor del video con imagen de precarga -->
-            <div id="video-container" class="w-full h-full">
-                <!-- Imagen de carga optimizada -->
-                <div id="loading-screen" class="w-full h-full bg-gray-900 flex items-center justify-center">
-                    <div class="text-white text-center">
-                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4 mx-auto"></div>
-                        <p class="text-sm md:text-base">Cargando contenido multimedia...</p>
-                    </div>
-                </div>
-                
-                <!-- Video optimizado con múltiples fuentes -->
-                <video id="banner-video" 
-                       class="w-full h-full object-cover hidden" 
-                       playsinline 
-                       muted 
-                       loop 
-                       preload="none"
-                       poster="{{ asset('images/video-poster.jpg') }}"
-                       data-src-mp4="{{ asset('videos/banner-video.mp4') }}"
-                       data-src-webm="{{ asset('videos/banner-video.webm') }}">
-                    <!-- Las fuentes se cargarán dinámicamente -->
-                    Tu navegador no soporta videos HTML5.
-                </video>
-            </div>
-            
-            <!-- Overlay oscuro -->
-            <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
-            
-            <!-- Script optimizado para la carga del video -->
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const video = document.getElementById('banner-video');
-                    const loadingScreen = document.getElementById('loading-screen');
-                    let videoLoaded = false;
-                    
-                    // Función para cargar el video cuando esté en el viewport
-                    function loadVideo() {
-                        if (videoLoaded) return;
-                        
-                        // Crear elementos source dinámicamente
-                        const mp4Source = document.createElement('source');
-                        mp4Source.src = video.dataset.srcMp4;
-                        mp4Source.type = 'video/mp4';
-                        
-                        const webmSource = document.createElement('source');
-                        webmSource.src = video.dataset.srcWebm;
-                        webmSource.type = 'video/webm';
-                        
-                        // Limpiar fuentes existentes y agregar las nuevas
-                        video.innerHTML = '';
-                        video.appendChild(webmSource); // WebM primero por ser más ligero
-                        video.appendChild(mp4Source);
-                        
-                        // Cargar el video
-                        video.load();
-                        videoLoaded = true;
-                        
-                        // Manejar la carga del video
-                        const videoLoadTimeout = setTimeout(() => {
-                            if (video.readyState < 3) {
-                                loadingScreen.innerHTML = `
-                                    <div class="text-center">
-                                        <p class="text-sm text-yellow-300 mb-2">El video está tardando en cargar</p>
-                                        <button onclick="location.reload()" class="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded">Reintentar</button>
-                                    </div>
-                                `;
-                            }
-                        }, 5000); // Mostrar mensaje después de 5 segundos
-                        
-                        video.onloadeddata = function() {
-                            clearTimeout(videoLoadTimeout);
-                            video.classList.remove('hidden');
-                            loadingScreen.classList.add('hidden');
-                            video.play().catch(e => console.log('Reproducción automática no permitida:', e));
-                        };
-                        
-                        video.onerror = function() {
-                            clearTimeout(videoLoadTimeout);
-                            loadingScreen.innerHTML = `
-                                <div class="text-center">
-                                    <p class="text-red-300 mb-2">No se pudo cargar el video</p>
-                                    <p class="text-xs opacity-75 mb-3">Puedes continuar navegando</p>
-                                    <button onclick="this.parentElement.remove()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded">Cerrar</button>
-                                </div>
-                            `;
-                        };
-                    }
-                    
-                    // Usar Intersection Observer para cargar el video cuando esté en el viewport
-                    if ('IntersectionObserver' in window) {
-                        const observer = new IntersectionObserver((entries) => {
-                            if (entries[0].isIntersecting) {
-                                loadVideo();
-                                observer.disconnect();
-                            }
-                        }, { threshold: 0.1 });
-                        
-                        observer.observe(video);
-                    } else {
-                        // Fallback para navegadores antiguos
-                        loadVideo();
-                    }
-                    
-                    // Cargar el video si el usuario interactúa con la página
-                    const userInteractionEvents = ['click', 'touchstart', 'keydown'];
-                    const handleUserInteraction = () => {
-                        if (!videoLoaded) {
-                            loadVideo();
-                        }
-                        userInteractionEvents.forEach(event => {
-                            document.removeEventListener(event, handleUserInteraction);
-                        });
-                    };
-                    
-                    userInteractionEvents.forEach(event => {
-                        document.addEventListener(event, handleUserInteraction, { once: true });
-                    });
-                });
-            </script>
-        </div>
-        <div class="relative z-10 text-left p-8 md:p-16 max-w-3xl">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-down">
-                Bienvenido a nuestra tienda en línea
-            </h1>
-            <p class="text-lg md:text-xl mb-8 animate-fade-in-up">
-                Descubre nuestra selección de productos de alta calidad a los mejores precios.
-                
-            </p>
-            <a href="{{ route('shop.index') }}"
-                class="inline-block bg-primary text-dark-text font-bold py-3 px-8 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">
-                Ir a la Tienda
-            </a>
-        </div>
-    </section>
+    <!-- Slider Hero -->
+    @if(isset($sliders) && $sliders->count() > 0)
+        <x-hero-slider :slides="$sliders->map(function($slider) {
+            return [
+                'type' => $slider->type,
+                'src' => $slider->media_url,
+                'title' => $slider->title,
+                'description' => $slider->description,
+                'button_text' => $slider->button_text ?? 'Ver más',
+                'button_url' => $slider->button_url ?? '#',
+                'thumbnail' => $slider->thumbnail_url
+            ];
+        })" />
+    @else
+        <!-- Slider por defecto si no hay sliders configurados -->
+        <x-hero-slider :slides="[
+            [
+                'type' => 'image',
+                'src' => 'https://images.unsplash.com/photo-1604594842169-1ec43edfad1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+                'title' => 'Materiales Eléctricos',
+                'description' => 'Todo lo que necesitas para tus instalaciones eléctricas',
+                'button_text' => 'Ver Catálogo',
+                'button_url' => route('products.index')
+            ],
+            [
+                'type' => 'image',
+                'src' => 'https://images.unsplash.com/photo-1556740734-7c084a70051f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+                'title' => 'Lámparas y Luminarias',
+                'description' => 'Iluminación eficiente para cada espacio',
+                'button_text' => 'Ver Luminarias',
+                'button_url' => route('products.index', ['category' => 'iluminacion'])
+            ]
+        ]" />
+    @endif
 
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto">

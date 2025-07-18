@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -26,7 +27,10 @@ class HomeController extends Controller
         if (!empty($visitedIds)) {
             $visitedProducts = Product::with('images')->whereIn('id', $visitedIds)->get();
         }
+        
+        // Obtener sliders activos
+        $sliders = Slider::active()->get();
 
-        return view('home', compact('products', 'categories', 'visitedProducts'));
+        return view('home', compact('products', 'categories', 'visitedProducts', 'sliders'));
     }
 }
