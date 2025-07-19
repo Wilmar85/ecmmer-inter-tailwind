@@ -1,55 +1,63 @@
 @php
-    $metaTitle = $product->name . ' | E-commerce Web';
-    $metaDescription = $product->short_description ?? Str::limit(strip_tags($product->description), 150);
-    $metaKeywords = $product->name . ', ' . ($product->category->name ?? '') . ', comprar, ecommerce';
-    $ogTitle = $product->name;
-    $ogDescription = $product->short_description ?? Str::limit(strip_tags($product->description), 150);
+    // Sanitizar datos para metadatos
+    $metaTitle = e($product->name) . ' | E-commerce Web';
+    $metaDescription = e($product->short_description ?? Str::limit(strip_tags($product->description), 150));
+    $metaKeywords = e($product->name . ', ' . ($product->category->name ?? '') . ', comprar, ecommerce');
+    $ogTitle = e($product->name);
+    $ogDescription = e($product->short_description ?? Str::limit(strip_tags($product->description), 150));
     $ogImage = $product->images->isNotEmpty()
         ? asset('storage/' . $product->images->first()->path)
         : asset('images/default-og.png');
     $canonical = url()->current();
+    
+    // Preparar datos para JSON-LD de forma segura
+    $jsonLdData = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'image' => $product->images->isNotEmpty() 
+            ? $product->images->map(fn($img) => asset('storage/' . $img->path))->all()
+            : [asset('images/default-og.png')],
+        'description' => $product->short_description ?? Str::limit(strip_tags($product->description), 150),
+        'sku' => $product->sku ?? (string)$product->id,
+        'brand' => [
+            '@type' => 'Brand',
+            'name' => $product->brand->name ?? 'Marca genérica'
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'MXN',
+            'price' => (float)$product->price,
+            'availability' => 'https://schema.org/' . ($product->stock > 0 ? 'InStock' : 'OutOfStock')
+        ]
+    ];
 @endphp
 
 @push('jsonld')
     <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "{{ $product->name }}",
-    "image": [
-        @if($product->images->isNotEmpty())
-            @foreach($product->images as $img)"{{ asset('storage/' . $img->path) }}"@if(!$loop->last),@endif @endforeach
-        @else
-            "{{ asset('images/default-og.png') }}"
-        @endif
-    ],
-    "description": "{{ $product->short_description ?? Str::limit(strip_tags($product->description), 150) }}",
-    "sku": "{{ $product->sku ?? $product->id }}",
-    "brand": {
-        "@type": "Brand",
-        "name": "{{ $product->brand->name ?? 'Marca genérica' }}"
-    },
-    "offers": {
-        "@type": "Offer",
-        "priceCurrency": "MXN",
-        "price": "{{ $product->price }}",
-        "availability": "https://schema.org/{{ $product->stock > 0 ? 'InStock' : 'OutOfStock' }}"
-    }
-}
-</script>
+        {!! json_encode($jsonLdData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 <x-app-layout>
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                fetch("{{ route('preferences.visited', ['productId' => $product->id]) }}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                });
+                // Usar el meta tag CSRF en lugar de inyectar directamente
+                const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                
+                if (token) {
+                    fetch("{{ route('preferences.visited', ['productId' => $product->id]) }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': token,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin'
+                    }).catch(error => console.error('Error al registrar visita:', error));
+                }
             });
         </script>
     @endpush
@@ -83,35 +91,78 @@
 
                     <div class="w-full">
                         @if ($product->images->isNotEmpty())
+                            @php
+                                $firstImage = $product->images->first();
+                                $firstImageUrl = $firstImage->image_url;
+                            @endphp
+                            
                             @if ($product->images->count() > 1)
-                                <div x-data="{ selectedImage: '{{ $product->images->first()->image_url }}' }" class="flex flex-row-reverse gap-4">
+                                <div x-data="{ selectedImage: '{{ e($firstImageUrl) }}' }" class="flex flex-row-reverse gap-4">
+                                    <!-- Imagen principal -->
                                     <div class="w-4/5">
-                                        <div
-                                            class="relative h-full w-full aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center group">
-                                            <img :src="selectedImage" alt="{{ $product->name }}"
-                                                class="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                                        <div class="relative h-full w-full aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center group">
+                                            <img :src="selectedImage" 
+                                                 alt="{{ e($product->name) }}"
+                                                 class="max-w-full max-h-full object-contain"
+                                                 @error="$el.onerror = () => { $el.src = '{{ e(asset('images/placeholder.jpg')) }}'; $el.onerror = null; }">
                                         </div>
                                     </div>
+                                    
+                                    <!-- Miniaturas -->
                                     <div class="w-1/5 space-y-4">
                                         @foreach ($product->images as $image)
-                                            <div class="aspect-w-1 aspect-h-1 rounded-md bg-gray-100 overflow-hidden cursor-pointer border-2 transition-all"
-                                                :class="{ 'border-primary': selectedImage === '{{ $image->image_url }}', 'border-transparent': selectedImage !== '{{ $image->image_url }}' }"
-                                                @click="selectedImage = '{{ $image->image_url }}'">
-                                                <img src="{{ $image->image_url }}"
-                                                    alt="Miniatura de {{ $product->name }}"
-                                                    class="w-full h-full object-contain">
-                                            </div>
+                                            @php
+                                                $thumbnail = optimized_image(
+                                                    $image->image_path,
+                                                    'thumb',
+                                                    'Miniatura de ' . $product->name,
+                                                    [
+                                                        'class' => 'w-full h-full object-cover',
+                                                        'style' => 'aspect-ratio: 1/1;'
+                                                    ]
+                                                );
+                                                $fullImage = optimized_image(
+                                                    $image->image_path,
+                                                    'large',
+                                                    $product->name,
+                                                    [
+                                                        'class' => 'max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105',
+                                                        'style' => 'aspect-ratio: 1/1;'
+                                                    ]
+                                                );
+                                            @endphp
+                                            <button 
+                                                type="button"
+                                                class="w-full h-full rounded-md bg-gray-100 overflow-hidden cursor-pointer border-2 transition-all"
+                                                :class="{ 'border-primary': selectedImage === '{{ e($fullImage) }}', 'border-transparent': selectedImage !== '{{ e($fullImage) }}' }"
+                                                @click="selectedImage = '{{ e($fullImage) }}'"
+                                                aria-label="Ver imagen de {{ e($product->name) }} - {{ $loop->iteration }} de {{ $loop->count }}">
+                                                <img src="{{ e($thumbnail) }}" 
+                                                     alt="Miniatura {{ $loop->iteration }}"
+                                                     class="w-full h-full object-cover"
+                                                     @error="this.src = '{{ e(asset('images/placeholder-thumb.jpg')) }}'">
+                                            </button>
                                         @endforeach
                                     </div>
                                 </div>
                             @else
-                                <div
-                                    class="relative h-96 w-full overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center group">
-                                    <img src="{{ $product->images->first()->image_url }}" alt="{{ $product->name }}"
-                                        class="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                                <!-- Vista para un solo producto -->
+                                <div class="relative h-96 w-full overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center group">
+                                    @php
+                                        $imgAttrs = [
+                                            'class' => 'max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105',
+                                            'style' => 'aspect-ratio: 1/1;',
+                                            'alt' => e($product->name),
+                                            'loading' => 'lazy',
+                                            'onerror' => "this.onerror=null; this.src='" . e(asset('images/placeholder.jpg')) . "'"
+                                        ];
+                                        $imgTag = optimized_image($firstImage->image_path, 'large', $product->name, $imgAttrs);
+                                    @endphp
+                                    {!! $imgTag !!}
                                 </div>
                             @endif
                         @else
+                            <!-- Vista cuando no hay imágenes -->
                             <div class="h-96 bg-gray-200 flex items-center justify-center rounded-lg">
                                 <span class="text-gray-500">Sin imagen</span>
                             </div>
@@ -127,7 +178,7 @@
                             ${{ number_format($product->price, 2) }}
                         </div>
                         <div class="prose max-w-none text-gray-600">
-                            <p>{{ $product->description }}</p>
+                            {!! $product->description !!}
                         </div>
                         
                         @php
@@ -160,10 +211,18 @@
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <div>
                                     <label for="quantity"
-                                        class="block text-sm font-medium text-gray-700 mb-2">Cantidad</label>
-                                    <input type="number" name="quantity" id="quantity" min="1"
-                                        max="{{ $product->stock }}" value="1"
-                                        class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                                        class="block text-sm font-medium text-gray-700 mb-2">{{ __('Cantidad') }}</label>
+                                    <input type="number" 
+                                           name="quantity" 
+                                           id="quantity" 
+                                           min="1"
+                                           max="{{ (int)$product->stock }}" 
+                                           value="1"
+                                           aria-label="{{ __('Cantidad') }}"
+                                           class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                                    @error('quantity')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <button type="submit"
                                     class="w-full text-center px-6 py-4 bg-primary border-2 border-primary rounded-full font-semibold text-base text-dark-text uppercase tracking-widest hover:bg-gray-800 hover:border-gray-800 hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"

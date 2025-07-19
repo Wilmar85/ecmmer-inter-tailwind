@@ -6,7 +6,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
-use Spatie\LaravelImageOptimizer\Facades\ImageOptimizer;
+use App\Services\ImageOptimizerService;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -64,19 +65,23 @@ class ProductController extends Controller
                 $files = [$files];
             }
             
-            // Asegurarse de que el directorio existe
-            $storagePath = 'images/products';
-            if (!file_exists(storage_path('app/public/' . $storagePath))) {
-                \Illuminate\Support\Facades\File::makeDirectory(storage_path('app/public/' . $storagePath), 0755, true);
-            }
+            // Configuración de tamaños para las miniaturas
+            $sizes = [
+                ['name' => 'thumb', 'width' => 300, 'height' => 300],
+                ['name' => 'medium', 'width' => 800, 'height' => 800],
+                // Agregar más tamaños según sea necesario
+            ];
+            
+            $imageService = new ImageOptimizerService();
             
             foreach ($files as $image) {
                 if ($image && $image->isValid()) {
-                    // Guardar en storage/app/public/images/products
-                    $path = $image->store($storagePath, 'public');
-                    
-                    // Optimizar la imagen
-                    ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    // Optimizar y redimensionar la imagen
+                    $path = $imageService->optimizeAndResize(
+                        $image,
+                        'images/products',
+                        $sizes
+                    );
                     
                     // Guardar la ruta relativa en la base de datos
                     $product->images()->create(['image_path' => $path]);

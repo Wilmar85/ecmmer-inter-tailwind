@@ -72,27 +72,45 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/contact', [ProfileController::class, 'updateContact'])->name('profile.contact.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Rutas del carrito
+    // Rutas del carrito con validación de datos
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'addItem'])->name('cart.add');
-    Route::patch('/cart/update/{item}', [CartController::class, 'updateItem'])->name('cart.update');
+    Route::post('/cart/add', [CartController::class, 'addItem'])
+        ->middleware('validate.data')
+        ->name('cart.add');
+    Route::patch('/cart/update/{item}', [CartController::class, 'updateItem'])
+        ->middleware('validate.data')
+        ->name('cart.update');
     Route::delete('/cart/remove/{item}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
-    // Rutas de pedidos
+    // Rutas de pedidos con validación de datos
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders', [OrderController::class, 'store'])
+        ->middleware('validate.data')
+        ->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])
+        ->middleware('can:view,order')
+        ->name('orders.show');
 
-    // Rutas de checkout
+    // Rutas de checkout con validación de datos
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/validate-stock', [CheckoutController::class, 'validateStock'])->name('checkout.validate-stock');
-    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
-    Route::get('/checkout/failure/{order}', [CheckoutController::class, 'failure'])->name('checkout.failure');
-    Route::get('/checkout/pending/{order}', [CheckoutController::class, 'pending'])->name('checkout.pending');
+    Route::post('/checkout/validate-stock', [CheckoutController::class, 'validateStock'])
+        ->middleware('validate.data')
+        ->name('checkout.validate-stock');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])
+        ->middleware('validate.data')
+        ->name('checkout.process');
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])
+        ->middleware('can:view,order')
+        ->name('checkout.success');
+    Route::get('/checkout/failure/{order}', [CheckoutController::class, 'failure'])
+        ->middleware('can:view,order')
+        ->name('checkout.failure');
+    Route::get('/checkout/pending/{order}', [CheckoutController::class, 'pending'])
+        ->middleware('can:view,order')
+        ->name('checkout.pending');
 });
 
 // Rutas públicas de productos

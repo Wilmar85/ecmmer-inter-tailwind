@@ -110,31 +110,44 @@
                                                     
                                                     <div class="relative" style="min-height: 100px;">
                                                         @if($imageUrl)
-                                                            <img src="{{ $imageUrl }}"
-                                                                alt="{{ $item->product->name }}"
+                                                            <img src="{{ e($imageUrl) }}"
+                                                                alt="{{ e($item->product->name) }}"
                                                                 class="w-16 h-16 object-cover rounded border border-gray-200"
-                                                                onerror="console.error('Error al cargar imagen:', this.src); this.onerror=null; this.src='{{ asset('storage/images/placeholder.jpg') }}';">
+                                                                onerror="console.error('Error al cargar imagen:', this.src); this.onerror=null; this.src='{{ e(asset('storage/images/placeholder.jpg')) }}';">
                                                         @else
                                                             <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
-                                                                <span class="text-gray-500 text-xs">Sin imagen</span>
+                                                                <span class="text-gray-500 text-xs">{{ __('Sin imagen') }}</span>
                                                             </div>
                                                         @endif
                                                         
                                                         <!-- Debug info (solo visible en entorno local) -->
                                                         @if(app()->environment('local'))
                                                             <div class="absolute -bottom-24 left-0 text-xs bg-white p-1 border border-gray-300 rounded z-10" style="width: 250px; max-height: 100px; overflow-y: auto;">
-                                                                <div class="font-bold mb-1">Debug Info:</div>
+                                                                <div class="font-bold mb-1">{{ __('Debug Info') }}:</div>
                                                                 @foreach($debugInfo as $key => $value)
-                                                                    <div><span class="font-semibold">{{ $key }}:</span> {{ $value }}</div>
+                                                                    <div>
+                                                                        <span class="font-semibold">{{ e($key) }}:</span> 
+                                                                        @if(is_array($value) || is_object($value))
+                                                                            {{ json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) }}
+                                                                        @else
+                                                                            {{ e($value) }}
+                                                                        @endif
+                                                                    </div>
                                                                 @endforeach
                                                             </div>
                                                         @endif
                                                     </div>
                                                     <div class="ml-4">
                                                         <a href="{{ route('products.show', $item->product) }}"
-                                                            class="text-sm font-medium text-gray-900 hover:text-blue-500">
-                                                            {{ $item->product->name }}
+                                                            class="text-sm font-medium text-gray-900 hover:text-blue-500"
+                                                            title="{{ e($item->product->name) }}">
+                                                            {{ e($item->product->name) }}
                                                         </a>
+                                                        @if($item->product->sku)
+                                                            <div class="text-xs text-gray-500">
+                                                                {{ __('SKU') }}: {{ e($item->product->sku) }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>
@@ -146,11 +159,15 @@
                                                     class="flex items-center space-x-2">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                                        min="1" max="{{ $item->product->stock }}"
-                                                        class="w-20 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                                    <input type="number" 
+                                                           name="quantity" 
+                                                           value="{{ (int)$item->quantity }}"
+                                                           min="1" 
+                                                           max="{{ (int)$item->product->stock }}"
+                                                           class="w-20 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                                           aria-label="{{ __('Cantidad') }}">
                                                     <button type="submit" class="text-blue-500 hover:text-blue-700">
-                                                        Actualizar
+                                                        {{ __('Actualizar') }}
                                                     </button>
                                                 </form>
                                             </td>
