@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\WhatsAppController;
+use App\Http\Controllers\Api\NeighborhoodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,8 @@ use App\Http\Controllers\API\WhatsAppController;
 |
 */
 
-// Aquí puedes agregar rutas de API en el futuro.
 // Ruta para obtener el número de WhatsApp del botón flotante
 Route::middleware('auth:web')->get('/user/whatsapp-float-number', [WhatsAppController::class, 'getFloatButtonNumber']);
+
+// Ruta para obtener los barrios por ciudad
+Route::get('/neighborhoods', [NeighborhoodController::class, 'index']);

@@ -60,17 +60,19 @@
                                                         <li class="py-6 flex">
                                                             <div
                                                                 class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                                                @if ($item->product->images->isNotEmpty())
-                                                                    <img src="{{ asset('storage/' . $item->product->images->first()->path) }}"
-                                                                        alt="{{ $item->product->name }}"
-                                                                        class="w-full h-full object-center object-cover">
-                                                                @else
-                                                                    <div
-                                                                        class="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                                        <span class="text-gray-500 text-xs">Sin
-                                                                            imagen</span>
-                                                                    </div>
-                                                                @endif
+                                                                @php
+                                                                    $imageUrl = $item->image_path 
+                                                                        ? (str_starts_with($item->image_path, 'http') 
+                                                                            ? $item->image_path 
+                                                                            : (str_starts_with($item->image_path, 'storage/') 
+                                                                                ? asset($item->image_path) 
+                                                                                : asset('storage/' . $item->image_path)))
+                                                                        : asset('images/placeholder.jpg');
+                                                                @endphp
+                                                                <img src="{{ $imageUrl }}"
+                                                                    alt="{{ $item->product_name }}"
+                                                                    class="w-full h-full object-center object-cover"
+                                                                    onerror="this.onerror=null; this.src='{{ asset('images/placeholder.jpg') }}';">
                                                             </div>
 
                                                             <div class="ml-4 flex-1 flex flex-col">

@@ -66,7 +66,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         
-        // Actualizar solo los campos de contacto
+        // Actualizar solo los campos de contacto del usuario
         $user->customer_service_email = $request->customer_service_email;
         $user->whatsapp_number = $request->whatsapp_number;
         $user->whatsapp_float_button = $request->whatsapp_float_button;
@@ -75,6 +75,29 @@ class ProfileController extends Controller
         $user->business_hours = $request->business_hours;
         
         $user->save();
+        
+        // Si el usuario es administrador, actualizar también la configuración del sitio
+        if ($user->isAdmin()) {
+            $settings = \App\Models\SiteSetting::first();
+            
+            if (!$settings) {
+                $settings = new \App\Models\SiteSetting();
+            }
+            
+            $settings->customer_service_email = $request->customer_service_email;
+            $settings->whatsapp_number = $request->whatsapp_number;
+            $settings->whatsapp_float_button = $request->whatsapp_float_button;
+            $settings->sales_email = $request->sales_email;
+            $settings->support_email = $request->support_email;
+            $settings->business_hours = $request->business_hours;
+            
+            // Asegurarse de que el nombre del sitio no sea nulo
+            if (empty($settings->site_name)) {
+                $settings->site_name = config('app.name');
+            }
+            
+            $settings->save();
+        }
         
         // Determinar qué número de WhatsApp usar para el botón flotante
         $whatsappNumber = $request->whatsapp_float_button ?: $request->whatsapp_number;

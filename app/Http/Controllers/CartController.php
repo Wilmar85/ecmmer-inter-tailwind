@@ -23,10 +23,25 @@ class CartController extends Controller
 
     public function index(): View
     {
-        $cart = Cart::firstOrCreate(
+        $cart = Cart::with(['items.product.images' => function($query) {
+            $query->orderBy('is_primary', 'desc');
+        }])->firstOrCreate(
             ['user_id' => Auth::id(), 'status' => 'active'],
             ['total' => 0]
         );
+        
+        // Debug: Verificar si se están cargando las imágenes
+        if ($cart->items->isNotEmpty()) {
+            foreach ($cart->items as $item) {
+                \Log::debug('Producto en carrito:', [
+                    'product_id' => $item->product_id,
+                    'images_count' => $item->product->images ? $item->product->images->count() : 0,
+                    'first_image_path' => $item->product->images->first() ? $item->product->images->first()->path : 'No image path'
+                ]);
+            }
+        } else {
+            \Log::debug('El carrito está vacío');
+        }
         
         return view('cart.index', compact('cart'));
     }

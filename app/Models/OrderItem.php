@@ -16,7 +16,8 @@ class OrderItem extends Model
         'product_name',
         'quantity',
         'price',
-        'subtotal'
+        'subtotal',
+        'image_path'
     ];
 
     protected $casts = [
@@ -44,6 +45,12 @@ class OrderItem extends Model
             }
             if (!$item->price) {
                 $item->price = $item->product->current_price;
+            }
+            if (!$item->image_path) {
+                $primaryImage = $item->product->images->where('is_primary', true)->first() ?? $item->product->images->first();
+                if ($primaryImage) {
+                    $item->image_path = $primaryImage->image_path;
+                }
             }
             $item->subtotal = $item->quantity * $item->price;
         });

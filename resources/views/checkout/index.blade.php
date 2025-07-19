@@ -56,17 +56,9 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                     <div>
                                         <label for="city" class="block text-sm font-medium text-gray-700">Ciudad</label>
-                                        <select name="city" id="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <select name="city" id="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                                             <option value="">Seleccione una ciudad</option>
-                                            <option value="Bogotá">Bogotá</option>
-                                            <option value="Medellín">Medellín</option>
-                                            <option value="Cali">Cali</option>
-                                            <option value="Barranquilla">Barranquilla</option>
-                                            <option value="Cartagena">Cartagena</option>
-                                            <option value="Bucaramanga">Bucaramanga</option>
-                                            <option value="Pereira">Pereira</option>
-                                            <option value="Manizales">Manizales</option>
-                                            <option value="Cúcuta">Cúcuta</option>
+                                            <option value="Bucaramanga" selected>Bucaramanga</option>
                                         </select>
                                     </div>
                                 </div>
@@ -81,285 +73,112 @@
                             </div>
 
                             <script>
-                                // Costos de envío por barrio
-                                const shippingCosts = {
-                                    'Bogotá': {
-                                        'Chapinero': 5000,
-                                        'Usaquén': 6000,
-                                        'Teusaquillo': 5500,
-                                        'Suba': 7000,
-                                        'Fontibón': 8000,
-                                        'Kennedy': 9000,
-                                        'Engativá': 7500,
-                                        'Barrios Unidos': 6000,
-                                        'Puente Aranda': 7000,
-                                        'Antonio Nariño': 6500,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Medellín': {
-                                        'El Poblado': 5000,
-                                        'Laureles': 6000,
-                                        'Belen': 5500,
-                                        'Castilla': 7000,
-                                        'Robledo': 8000,
-                                        'Manrique': 7500,
-                                        'Aranjuez': 6000,
-                                        'Buenos Aires': 7000,
-                                        'San Javier': 6500,
-                                        'La América': 5500,
-                                        'La Candelaria': 5000,
-                                        'Doce de Octubre': 6000,
-                                        'Guayabal': 7000,
-                                        'San Antonio de Prado': 7500,
-                                        'Santa Cruz': 8000,
-                                        'Popular': 6500,
-                                        'Villa Hermosa': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Cali': {
-                                        'San Fernando': 5000,
-                                        'Granada': 6000,
-                                        'El Peñón': 5500,
-                                        'Aguablanca': 7000,
-                                        'Ciudad Jardín': 8000,
-                                        'San Antonio': 7500,
-                                        'La Flora': 6000,
-                                        'Versalles': 7000,
-                                        'El Ingenio': 6500,
-                                        'Santa Mónica': 5500,
-                                        'La Merced': 5000,
-                                        'Alfonso López': 6000,
-                                        'Siloé': 7000,
-                                        'Meléndez': 7500,
-                                        'San Nicolás': 8000,
-                                        'Sucre': 6500,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Barranquilla': {
-                                        'El Prado': 5000,
-                                        'Alto Prado': 6000,
-                                        'Villa Country': 5500,
-                                        'Ciudad Jardín': 7000,
-                                        'Boston': 8000,
-                                        'La Concepción': 7500,
-                                        'Las Delicias': 6000,
-                                        'San Vicente': 7000,
-                                        'Rebolo': 6500,
-                                        'La Unión': 5500,
-                                        'Las Nieves': 5000,
-                                        'Montecristo': 6000,
-                                        'La Ceiba': 7000,
-                                        'El Recreo': 7500,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Cartagena': {
-                                        'Getsemaní': 5000,
-                                        'Bocagrande': 6000,
-                                        'Manga': 5500,
-                                        'El Cabrero': 7000,
-                                        'La Matuna': 8000,
-                                        'Pie de la Popa': 7500,
-                                        'Crespo': 6000,
-                                        'Chambacú': 7000,
-                                        'San Diego': 6500,
-                                        'Torices': 5500,
-                                        'La Boquilla': 5000,
-                                        'El Bosque': 6000,
-                                        'Olaya Herrera': 7000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Bucaramanga': {
-                                        'Cabecera': 5000,
-                                        'Alarcón': 6000,
-                                        'Antonia Santos': 5500,
-                                        'Provenza': 7000,
-                                        'La Concordia': 8000,
-                                        'Mutis': 7500,
-                                        'San Alonso': 6000,
-                                        'San Francisco': 7000,
-                                        'La Universidad': 6500,
-                                        'Sotomayor': 5500,
-                                        'Girardot': 5000,
-                                        'La Feria': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Pereira': {
-                                        'Cuba': 5000,
-                                        'Alamos': 6000,
-                                        'Centro': 5500,
-                                        'Boston': 7000,
-                                        'San Joaquín': 8000,
-                                        'Villavicencio': 7500,
-                                        'El Jardín': 6000,
-                                        'San Nicolás': 7000,
-                                        'La Circunvalar': 6500,
-                                        'Villa Santana': 5500,
-                                        'Kennedy': 5000,
-                                        'San Fernando': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Manizales': {
-                                        'Palogrande': 5000,
-                                        'La Enea': 6000,
-                                        'Chipre': 5500,
-                                        'El Cable': 7000,
-                                        'San Jorge': 8000,
-                                        'La Francia': 7500,
-                                        'Centro': 6000,
-                                        'Malhabar': 7000,
-                                        'Los Rosales': 6500,
-                                        'Villa Pilar': 5500,
-                                        'Campohermoso': 5000,
-                                        'Villahermosa': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Cúcuta': {
-                                        'La Playa': 5000,
-                                        'Ciudad Jardín': 6000,
-                                        'La Cabrera': 5500,
-                                        'Quinta Oriental': 7000,
-                                        'Aeropuerto': 8000,
-                                        'El Rodeo': 7500,
-                                        'La Victoria': 6000,
-                                        'San José de Cúcuta': 7000,
-                                        'Colsag': 6500,
-                                        'Avenida 6': 5500,
-                                        'La Libertad': 5000,
-                                        'Los Patios': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'Ibagué': {
-                                        'Centro': 5000,
-                                        'La Pola': 6000,
-                                        'La Francia': 5500,
-                                        'El Salado': 7000,
-                                        'El Salado Popular': 8000,
-                                        'San Simón': 7500,
-                                        'El Bosque': 6000,
-                                        'El Jardín': 7000,
-                                        'San Fernando': 6500,
-                                        'El Líbano': 5500,
-                                        'El Vergel': 5000,
-                                        'Picaleña': 6000,
-                                        'default': 8000 // Costo por defecto para otros barrios
-                                    },
-                                    'default': 10000 // Costo por defecto para otras ciudades
-                                };
-
-                                // Obtener el costo de envío basado en la ciudad y el barrio
-                                function getShippingCost(city, neighborhood) {
-                                    if (shippingCosts[city] && shippingCosts[city][neighborhood]) {
-                                        return shippingCosts[city][neighborhood];
-                                    } else if (shippingCosts[city] && shippingCosts[city]['default']) {
-                                        return shippingCosts[city]['default'];
-                                    } else {
-                                        return shippingCosts['default'];
-                                    }
-                                }
-
-                                // Actualizar el costo de envío cuando cambia el barrio
-                                function updateShippingCost() {
-                                    try {
-                                        const city = document.getElementById('city').value;
-                                        const neighborhood = document.getElementById('neighborhood').value;
-                                        const deliveryChecked = document.getElementById('delivery').checked;
-                                        
-                                        if (deliveryChecked) {
-                                            const shippingCost = getShippingCost(city, neighborhood);
-                                            console.log('Actualizando costo de envío a:', shippingCost);
-                                            
-                                            // Actualizar el valor en el input oculto
-                                            const shippingInput = document.getElementById('shipping-cost-input');
-                                            if (shippingInput) {
-                                                shippingInput.value = shippingCost;
-                                            }
-                                            
-                                            // Actualizar el valor mostrado
-                                            const shippingDisplay = document.getElementById('shipping-cost');
-                                            if (shippingDisplay) {
-                                                shippingDisplay.textContent = formatCurrency(shippingCost);
-                                            }
-                                            
-                                            // Actualizar el total
-                                            updateTotal();
-                                        }
-                                    } catch (error) {
-                                        console.error('Error al actualizar el costo de envío:', error);
-                                    }
-                                }
-
-                                // Manejo de barrios por ciudad
-                                const neighborhoodsByCity = {
-                                    'Bogotá': [
-                                        'Chapinero', 'Usaquén', 'Teusaquillo', 'Suba', 'Fontibón', 'Kennedy', 'Engativá', 'Barrios Unidos', 'Puente Aranda', 'Antonio Nariño', 'Santa Fe', 'San Cristóbal', 'Ciudad Bolívar', 'Tunjuelito', 'Bosa', 'Rafael Uribe Uribe', 'La Candelaria', 'Los Mártires', 'Sumapaz'
-                                    ],
-                                    'Medellín': [
-                                        'El Poblado', 'Laureles', 'Belen', 'Castilla', 'Robledo', 'Manrique', 'Aranjuez', 'Buenos Aires', 'San Javier', 'La América', 'La Candelaria', 'Doce de Octubre', 'Guayabal', 'San Antonio de Prado', 'Santa Cruz', 'Popular', 'Villa Hermosa'
-                                    ],
-                                    'Cali': [
-                                        'San Fernando', 'Granada', 'El Peñón', 'Aguablanca', 'Ciudad Jardín', 'San Antonio', 'La Flora', 'Versalles', 'El Ingenio', 'Santa Mónica', 'La Merced', 'Alfonso López', 'Siloé', 'Meléndez', 'San Nicolás', 'Sucre'
-                                    ],
-                                    'Barranquilla': [
-                                        'El Prado', 'Alto Prado', 'Villa Country', 'Ciudad Jardín', 'Boston', 'La Concepción', 'Las Delicias', 'San Vicente', 'Rebolo', 'La Unión', 'Las Nieves', 'Montecristo', 'La Ceiba', 'El Recreo'
-                                    ],
-                                    'Cartagena': [
-                                        'Getsemaní', 'Bocagrande', 'Manga', 'El Cabrero', 'La Matuna', 'Pie de la Popa', 'Crespo', 'Chambacú', 'San Diego', 'Torices', 'La Boquilla', 'El Bosque', 'Olaya Herrera'
-                                    ],
-                                    'Bucaramanga': [
-                                        'Cabecera', 'Alarcón', 'Antonia Santos', 'Provenza', 'La Concordia', 'Mutis', 'San Alonso', 'San Francisco', 'La Universidad', 'Sotomayor', 'Girardot', 'La Feria'
-                                    ],
-                                    'Pereira': [
-                                        'Cuba', 'Alamos', 'Centro', 'Boston', 'San Joaquín', 'Villavicencio', 'El Jardín', 'San Nicolás', 'La Circunvalar', 'Villa Santana', 'Kennedy', 'San Fernando'
-                                    ],
-                                    'Manizales': [
-                                        'Palogrande', 'La Enea', 'Chipre', 'El Cable', 'San Jorge', 'La Francia', 'Centro', 'Malhabar', 'Los Rosales', 'Villa Pilar', 'Campohermoso', 'Villahermosa'
-                                    ],
-                                    'Cúcuta': [
-                                        'La Playa', 'Ciudad Jardín', 'La Cabrera', 'Quinta Oriental', 'Aeropuerto', 'El Rodeo', 'La Victoria', 'San José de Cúcuta', 'Colsag', 'Avenida 6', 'La Libertad', 'Los Patios'
-                                    ],
-                                    'Ibagué': [
-                                        'Centro', 'La Pola', 'La Francia', 'El Salado', 'El Salado Popular', 'San Simón', 'El Bosque', 'El Jardín', 'San Fernando', 'El Líbano', 'El Vergel', 'Picaleña'
-                                    ]
-                                };
+                                // Costo fijo de envío para todos los barrios
+                                const FIXED_SHIPPING_COST = 5000; // Costo fijo de envío para todos los barrios
 
                                 // Inicializar los selectores de ciudad y barrio
                                 const citySelect = document.getElementById('city');
                                 const neighborhoodSelect = document.getElementById('neighborhood');
                                 
-                                if (citySelect && neighborhoodSelect) {
-                                    // Función para actualizar los barrios basados en la ciudad seleccionada
-                                    function updateNeighborhoods() {
-                                        const selectedCity = citySelect.value;
+                                // Función para actualizar el costo de envío
+                                function updateShippingCost() {
+                                    try {
+                                        const city = citySelect ? citySelect.value : 'Bucaramanga';
+                                        const neighborhood = neighborhoodSelect ? neighborhoodSelect.value : '';
                                         
-                                        // Limpiar opciones actuales
-                                        neighborhoodSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
+                                        // Actualizar el valor del input oculto del costo de envío
+                                        const shippingInput = document.getElementById('shipping-cost-input');
+                                        if (shippingInput) {
+                                            shippingInput.value = FIXED_SHIPPING_COST;
+                                        }
                                         
-                                        // Agregar opciones de barrios para la ciudad seleccionada
-                                        if (selectedCity && neighborhoodsByCity[selectedCity]) {
-                                            neighborhoodsByCity[selectedCity].forEach(function(neighborhood) {
+                                        // Actualizar el valor mostrado
+                                        const shippingDisplay = document.getElementById('shipping-display');
+                                        if (shippingDisplay) {
+                                            shippingDisplay.textContent = formatCurrency(FIXED_SHIPPING_COST);
+                                        }
+                                        
+                                        // Actualizar el total
+                                        updateTotal();
+                                    } catch (error) {
+                                        console.error('Error al actualizar el costo de envío:', error);
+                                    }
+                                }
+
+                                // Función para formatear moneda
+                                function formatCurrency(amount) {
+                                    return new Intl.NumberFormat('es-CO', {
+                                        style: 'currency',
+                                        currency: 'COP',
+                                        minimumFractionDigits: 0
+                                    }).format(amount);
+                                }
+
+                                // Función para cargar los barrios desde la API
+                                async function loadNeighborhoods() {
+                                    if (!neighborhoodSelect) return;
+                                    
+                                    try {
+                                        // Mostrar indicador de carga
+                                        neighborhoodSelect.innerHTML = '<option value="">Cargando barrios...</option>';
+                                        neighborhoodSelect.disabled = true;
+                                        
+                                        console.log('Cargando barrios desde la API...');
+                                        // Hacer la petición a la API
+                                        const response = await fetch('/api/neighborhoods');
+                                        const data = await response.json();
+                                        
+                                        console.log('Respuesta de la API:', data);
+                                        
+                                        if (data.success && data.data && data.data.neighborhoods) {
+                                            // Limpiar el select
+                                            neighborhoodSelect.innerHTML = '<option value="">Seleccione un barrio</option>';
+                                            
+                                            // Agregar los barrios al select
+                                            data.data.neighborhoods.forEach(neighborhood => {
                                                 const option = document.createElement('option');
                                                 option.value = neighborhood;
                                                 option.textContent = neighborhood;
                                                 neighborhoodSelect.appendChild(option);
                                             });
+                                            
+                                            // Habilitar el select
+                                            neighborhoodSelect.disabled = false;
+                                            
+                                            console.log('Barrios cargados correctamente');
+                                            
+                                            // Actualizar el costo de envío
+                                            updateShippingCost();
+                                        } else {
+                                            throw new Error('No se pudieron cargar los barrios: ' + (data.message || 'Respuesta inesperada de la API'));
                                         }
-                                        
-                                        // Habilitar o deshabilitar el select de barrios
-                                        neighborhoodSelect.disabled = !selectedCity;
-                                        
-                                        // Actualizar el costo de envío cuando cambia la ciudad
-                                        updateShippingCost();
+                                    } catch (error) {
+                                        console.error('Error al cargar los barrios:', error);
+                                        neighborhoodSelect.innerHTML = `<option value="">Error al cargar los barrios: ${error.message}</option>`;
+                                    }
+                                }
+                                
+                                // Inicializar cuando el DOM esté listo
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    console.log('DOM completamente cargado');
+                                    
+                                    // Verificar que los elementos existan
+                                    if (!citySelect || !neighborhoodSelect) {
+                                        console.error('No se encontraron los elementos del formulario');
+                                        return;
                                     }
                                     
-                                    // Actualizar barrios cuando cambia la ciudad
-                                    citySelect.addEventListener('change', updateNeighborhoods);
+                                    // Establecer Bucaramanga como seleccionada por defecto
+                                    citySelect.value = 'Bucaramanga';
                                     
-                                    // Actualizar costo de envío cuando cambia el barrio
+                                    // Cargar los barrios
+                                    loadNeighborhoods();
+                                    
+                                    // Actualizar el costo de envío cuando cambia el barrio
                                     neighborhoodSelect.addEventListener('change', updateShippingCost);
                                     
-                                    // Inicializar barrios al cargar la página
-                                    updateNeighborhoods();
-                                }
+                                    console.log('Event listeners configurados correctamente');
+                                });
                                 </script>
 
                             </div>

@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            @if(auth()->user()->isAdmin())
+            @if(auth()->user()->hasRole('admin'))
             <div class="text-right mb-4">
                 <a href="{{ route('orders.index') }}"
                     class="inline-flex items-center px-5 py-2 bg-primary border-2 border-primary rounded-full font-semibold text-xs text-dark-text uppercase tracking-widest hover:bg-gray-800 hover:border-gray-800 hover:text-white transition-all duration-300">
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            @if(auth()->user()->isAdmin())
+            @if(auth()->user()->hasRole('admin'))
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-4xl">
                     @include('profile.partials.update-contact-information-form')

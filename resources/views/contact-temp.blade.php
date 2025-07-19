@@ -49,7 +49,7 @@
                             </div>
                             @endif
 
-                            @if($settings->whatsapp_number)
+                            @if($settings->phone)
                             <div class="flex items-start">
                                 <span class="text-primary mt-1">
                                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,8 +59,46 @@
                                     </svg>
                                 </span>
                                 <div class="ml-3">
-                                    <p class="font-semibold text-gray-800">Número de contacto</p>
-                                    <p class="text-gray-600">{{ $settings->whatsapp_number }}</p>
+                                    <p class="font-semibold text-gray-800">Teléfono</p>
+                                    <p class="text-gray-600">{{ $settings->phone }}</p>
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($settings->whatsapp_number)
+                            <div class="flex items-start">
+                                <span class="text-primary mt-1">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-800">WhatsApp</p>
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings->whatsapp_number) }}" 
+                                       class="text-blue-600 hover:underline"
+                                       target="_blank">
+                                        {{ $settings->whatsapp_number }}
+                                    </a>
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($settings->customer_service_email)
+                            <div class="flex items-start">
+                                <span class="text-primary mt-1">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <div class="ml-3">
+                                    <p class="font-semibold text-gray-800">Correo Electrónico</p>
+                                    <a href="mailto:{{ $settings->customer_service_email }}" class="text-blue-600 hover:underline">
+                                        {{ $settings->customer_service_email }}
+                                    </a>
                                 </div>
                             </div>
                             @endif
@@ -96,28 +134,23 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                        <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6" autocomplete="off">
+                        <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6">
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
                                     <input type="text" name="name" id="name" required
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent @error('name') border-red-500 @enderror"
-                                        value="{{ old('name') }}"
-                                        autocomplete="off"
-                                        placeholder="Ingresa tu nombre completo">
+                                        value="{{ old('name', $user->name ?? '') }}">
                                     @error('name')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico *</label>
-                                    <input type="email" name="email" id="email_fake" style="display:none">
                                     <input type="email" name="email" id="email" required
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent @error('email') border-red-500 @enderror"
-                                        value=""
-                                        autocomplete="off"
-                                        placeholder="Ingresa tu correo electrónico">
+                                        value="{{ old('email', $user->email ?? '') }}">
                                     @error('email')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
@@ -126,8 +159,7 @@
                             <div>
                                 <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Mensaje *</label>
                                 <textarea name="message" id="message" rows="5" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent @error('message') border-red-500 @enderror"
-                                    autocomplete="off">{{ old('message') }}</textarea>
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent @error('message') border-red-500 @enderror">{{ old('message') }}</textarea>
                                 @error('message')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

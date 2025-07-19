@@ -33,6 +33,15 @@ class OrderController extends Controller
             abort(403);
         }
 
+        // Cargar los ítems del pedido con sus productos e imágenes
+        $order->load(['items' => function($query) {
+            $query->with(['product' => function($q) {
+                $q->with(['images' => function($imgQuery) {
+                    $imgQuery->orderBy('is_primary', 'desc');
+                }]);
+            }]);
+        }]);
+
         return view('orders.show', compact('order'));
     }
 
@@ -125,13 +134,37 @@ class OrderController extends Controller
         }
         $order = Order::create($orderData);
 
-            // Crear items de la orden y actualizar stock
-            foreach ($cart->items as $item) {
-                $order->items()->create([
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price
-                ]);
+            // Cargar los ítems del carrito con sus productos e imágenes
+        $cart->load(['items' => function($query) {
+            $query->with(['product' => function($q) {
+                $q->with(['images' => function($imgQuery) {
+                    $imgQuery->orderBy('is_primary', 'desc');
+                }]);
+            }]);
+        }]);
+        
+        // Crear items de la orden y actualizar stock
+        foreach ($cart->items as $item) {
+            // Obtener la imagen principal del producto
+            $imagePath = null;
+            
+            // Verificar si el producto y sus imágenes están cargados
+            if ($item->relationLoaded('product') && 
+                $item->product && 
+                $item->product->relationLoaded('images')) {
+                
+                // Obtener la imagen principal o la primera disponible
+                $primaryImage = $item->product->images->first();
+                $imagePath = $primaryImage ? $primaryImage->path : null;
+            }
+
+            $order->items()->create([
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'image_path' => $imagePath,
+                'product_name' => $item->product->name
+            ]);
 
                 $item->product->decrement('stock', $item->quantity);
             }
