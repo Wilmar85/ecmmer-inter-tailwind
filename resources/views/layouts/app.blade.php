@@ -138,22 +138,25 @@
         document.addEventListener('livewire:update', updateWhatsAppButton);
     </script>
 
-    {{-- CAMBIO AQUÍ: Se eliminó style="display: none;" --}}
     <div x-data="{ 
             showCookieBanner: true,
             init() {
-                // Verificar localStorage al inicio
-                const accepted = localStorage.getItem('cookieAccepted');
-                if (accepted === 'accepted' || accepted === 'rejected') {
+                // Verificar si ya se ha interactuado con el banner en esta sesión
+                const interacted = sessionStorage.getItem('cookieBannerInteracted');
+                if (interacted === 'true') {
                     this.showCookieBanner = false;
+                } else {
+                    this.showCookieBanner = true;
                 }
             },
             handleAccept() {
-                localStorage.setItem('cookieAccepted', 'accepted');
+                // Marcar como interactuado en esta sesión
+                sessionStorage.setItem('cookieBannerInteracted', 'true');
                 this.showCookieBanner = false;
             },
             handleReject() {
-                localStorage.setItem('cookieAccepted', 'rejected');
+                // Marcar como interactuado en esta sesión
+                sessionStorage.setItem('cookieBannerInteracted', 'true');
                 this.showCookieBanner = false;
             }
         }" x-init="init()" x-show="showCookieBanner" x-cloak        x-transition:enter="transition ease-out duration-500"
@@ -165,7 +168,7 @@
         class="fixed bottom-0 left-0 w-full bg-gray-900 text-white p-4 z-50 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
         <p class="text-sm text-center md:text-left">
             Usamos cookies para mejorar tu experiencia y cumplir la <b>Ley 1581 de 2012</b> y <b>Decreto 1377 de
-                2013</b> de Colombia. Consulta nuestra <a href="{{ url('/terminos') }}"
+                2013</b> de Colombia. Consulta nuestra <a href="{{ url('/terminos-y-condiciones') }}"
                 class="underline hover:text-primary">Política de Cookies</a>.
         </p>
         <div class="flex-shrink-0 flex gap-3">
