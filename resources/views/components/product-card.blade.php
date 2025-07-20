@@ -6,17 +6,21 @@
         @php
             // Obtener la imagen primaria o la primera imagen disponible
             $image = $product->primaryImage ?? $product->images->first();
-            // Usar el accesor image_url del modelo ProductImage
-            $imgUrl = $image->image_url;
         @endphp
 
-        <a href="{{ route('products.show', $product) }}">
-            <div class="h-48 w-full bg-gray-50 flex items-center justify-center overflow-hidden">
-                <img src="{{ $imgUrl }}" 
-                     alt="{{ $product->name }}"
-                     class="h-full w-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                     onerror="this.onerror=null; this.src='{{ asset('images/placeholder-product.png') }}'"
-                     loading="lazy">
+        <a href="{{ route('products.show', $product) }}" class="block h-48 w-full bg-gray-50 overflow-hidden">
+            <div class="h-full w-full flex items-center justify-center">
+                {!! 
+                    optimized_image(
+                        $image->image_path, 
+                        'medium', 
+                        $product->name,
+                        [
+                            'class' => 'h-full w-full object-contain group-hover:scale-110 transition-transform duration-300 ease-in-out',
+                            'onerror' => "this.onerror=null; this.src='" . asset('images/placeholder-product.png') . "'"
+                        ]
+                    ) 
+                !!}
             </div>
         </a>
 
