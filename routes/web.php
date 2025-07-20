@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\DebugController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
@@ -59,6 +60,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 });
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+
+Route::get('/debug/images', [DebugController::class, 'checkImages']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

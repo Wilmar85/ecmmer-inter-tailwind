@@ -64,7 +64,7 @@
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if ($product->images->isNotEmpty())
-                                                <img src="{{ asset('storage/' . $product->images->first()->path) }}"
+                                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
                                                     alt="{{ $product->name }}"
                                                     class="h-10 w-10 rounded-full object-cover">
                                             @else

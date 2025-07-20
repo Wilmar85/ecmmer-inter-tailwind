@@ -28,7 +28,23 @@ class ProductImage extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return asset('storage/' . $this->image_path);
+        // Si no hay ruta de imagen, retornar un placeholder
+        if (empty($this->image_path)) {
+            return asset('images/placeholder.jpg');
+        }
+        
+        // Si ya es una URL completa, retornarla directamente
+        if (str_starts_with($this->image_path, 'http')) {
+            return $this->image_path;
+        }
+        
+        // Si la ruta ya comienza con 'storage/', usar asset directamente
+        if (str_starts_with($this->image_path, 'storage/')) {
+            return asset($this->image_path);
+        }
+        
+        // Para rutas relativas, asegurarse de no tener barras iniciales duplicadas
+        return asset('storage/' . ltrim($this->image_path, '/'));
     }
 
     protected static function boot()
