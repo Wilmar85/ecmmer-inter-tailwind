@@ -8,8 +8,8 @@
 /vendor/
 
 /
-.env
-.env.backup
+/.env
+/.env.backup
 .phpunit.result.cache
 
 Homestead.json
