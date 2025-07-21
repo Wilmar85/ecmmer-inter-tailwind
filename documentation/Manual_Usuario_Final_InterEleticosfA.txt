@@ -14,6 +14,27 @@ TABLA DE CONTENIDOS
 8. Gestión de Cuenta de Usuario
 9. Preguntas Frecuentes (FAQ)
 10. Contacto y Soporte
+11. Configuración del Sitio
+
+========================================
+11. CONFIGURACIÓN DEL SITIO
+========================================
+
+La tienda en línea InterEleticosf&A le permite personalizar ciertos aspectos de su experiencia de compra:
+
+11.1 INFORMACIÓN DE CONTACTO
+- Número de WhatsApp: Disponible para consultas rápidas
+- Correo de soporte: Para asistencia técnica
+- Horario de atención: Consulte nuestros horarios de atención
+- Dirección: Nuestra ubicación física
+- Teléfono: Para contacto telefónico directo
+
+11.2 PREFERENCIAS DE USUARIO
+- Configuración de notificaciones
+- Preferencias de comunicación
+- Configuración de privacidad
+
+Toda la configuración del sitio puede ser modificada por el administrador en la sección de Configuración del panel de administración.
 
 ========================================
 1. INTRODUCCIÓN
@@ -202,16 +223,27 @@ R: Sí, todos nuestros productos tienen garantía de fábrica. Consulte los tér
 ========================================
 10. CONTACTO Y SOPORTE
 ========================================
-Si necesita ayuda, puede contactarnos por:
 
-- Chat en línea: Disponible en el sitio web
-- Correo electrónico: soporte@interelectricosfa.com
-- Teléfono: [Número de soporte]
-- Redes sociales: @InterEleticosfA
+Para recibir asistencia técnica o realizar consultas:
 
-Horario de atención:
-Lunes a Viernes: 9:00 AM - 6:00 PM
-Sábados: 9:00 AM - 2:00 PM
+1. Formulario de Contacto:
+   - Complete el formulario en la sección 'Contacto'
+   - Especifique claramente su consulta
+   - Recibirá una respuesta en 24-48 horas hábiles
+
+2. Soporte por WhatsApp:
+   - Haga clic en el ícono flotante de WhatsApp
+   - Envíe su mensaje directamente al número configurado
+   - Horario de atención según lo configurado en la sección de Configuración
+
+3. Correo Electrónico:
+   - Envíe un correo a la dirección configurada en la sección de Configuración
+   - Incluya toda la información relevante
+   - Adjunte capturas de pantalla si es necesario
+
+4. Teléfono:
+   - Llame al número de contacto durante el horario de atención
+   - Horario de atención según lo configurado en la sección de Configuración
 
 ========================================
 INFORMACIÓN ADICIONAL

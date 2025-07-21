@@ -6,14 +6,31 @@ INFORMACIÓN DE ACCESO AL SISTEMA
 ========================================
 
 CREDENCIALES DE ADMINISTRADOR:
-- URL de Acceso: /admin/login
+- URL de Acceso: http://localhost:8000/admin/login
 - Correo Electrónico: admin@ecomer-web.com
 - Contraseña: admin123
 
 CREDENCIALES DE CLIENTE DEMO:
-- URL de Acceso: /login
+- URL de Acceso: http://localhost:8000/login
 - Correo Electrónico: cliente@ecomer-web.com
 - Contraseña: cliente123
+
+========================================
+CONFIGURACIÓN GENERAL DEL SITIO
+========================================
+
+La configuración del sitio se encuentra en: /admin/settings
+
+CAMPOS DISPONIBLES:
+- Nombre del sitio: Nombre de la tienda que se mostrará en el encabezado
+- Correo de servicio al cliente: Email para consultas generales
+- Número de WhatsApp: Número principal para contacto vía WhatsApp
+- Botón flotante de WhatsApp: Número alternativo para el botón flotante (opcional)
+- Correo de ventas: Email para consultas comerciales
+- Correo de soporte: Email para soporte técnico
+- Horario de atención: Horario de atención al cliente
+- Dirección: Dirección física de la tienda
+- Teléfono: Teléfono de contacto
 
 ========================================
 TABLA DE CONTENIDOS
