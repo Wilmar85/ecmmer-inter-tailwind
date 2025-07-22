@@ -1,30 +1,133 @@
-/.vscode/
-/.idea/
-/node_modules/
-/public/build/
-/public/hot
-/public/storage
-/storage/*.key
-/vendor/
+# Dependencias
+/node_modules
+/vendor
+/node_modules
+/.phpunit.result.cache
+/phpunit.xml
+/.phpunit.cache
 
-/
+# Archivos de entorno
 .env
-/.env.backup
-phpunit.result.cache
+.env.*.local
+.env.backup
+.env.production
+.env.staging
+.env.testing
 
-Homestead.json
-Homestead.yaml
-
-npm-debug.log
-yarn-error.log
-
+# Archivos de almacenamiento
+/storage/*.key
+/storage/*.key.pub
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/logs/*.log
-!/storage/logs/.gitignore
 !/storage/framework/cache/.gitignore
 !/storage/framework/sessions/.gitignore
 !/storage/framework/testing/.gitignore
 !/storage/framework/views/.gitignore
+!/storage/logs/.gitignore
+
+# Archivos de depuración
+*.log
+*.sql
+*.sqlite
+*.sqlite-journal
+
+# Archivos de IDE y editor
+/.idea
+/.vscode
+/.vs
+/.fleet
+/.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+.php_cs.cache
+.phpunit.result.cache
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local
+Homestead.json
+Homestead.yaml
+Vagrantfile
+
+# Archivos de paquetes
+composer.lock
+package-lock.json
+yarn.lock
+
+# Archivos de compilación
+/public/build
+/public/hot
+/public/storage
+/public/mix-manifest.json
+
+# Archivos de pruebas
+/coverage
+/coverage/
+*.phpunit.*
+.phpunit.cache/
+
+# Archivos de respaldo
+*.bak
+*.swp
+*~.nib
+*.swo
+*~
+*.swo
+
+# Archivos de entorno local
+.env.local
+.env.*.local
+
+# Archivos de caché de Laravel
+bootstrap/cache/*
+
+# Archivos de configuración local
+*.local.php
+
+# Archivos de configuración de servicios externos
+/.fleet
+/.idea
+/.vscode
+
+# Archivos de configuración de Docker
+docker-compose.override.yml
+
+# Archivos de configuración de PHPUnit
+/phpunit.xml
+
+# Archivos de configuración de PHP CS Fixer
+.php-cs-fixer.cache
+.php-cs-fixer.dist.php
+
+# Archivos de configuración de PHPStan
+.phpstan.neon
+.phpstan.neon.dist
+
+# Archivos de configuración de PHPUnit
+/phpunit.xml.dist
+
+# Archivos de configuración de PHP_CodeSniffer
+.phpcs-cache
+.phpcs.xml
+phpcs.xml
+
+# Archivos de configuración de PHPStan
+/phpstan.neon
+/phpstan.neon.dist
+
+# Archivos de configuración de PHPUnit
+/phpunit.xml.dist
+
+# Archivos de configuración de PHP_CodeSniffer
+/phpcs.xml
+/phpcs.xml.dist
+
+# Archivos de configuración de PHPStan
+/phpstan.neon
+/phpstan.neon.dist
