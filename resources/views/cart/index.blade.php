@@ -74,7 +74,6 @@
                                                     @php
                                                         // Inicializar variables
                                                         $imageUrl = null;
-                                                        $debugInfo = [];
                                                         
                                                         // Verificar si hay imágenes en el producto
                                                         if ($item->product->relationLoaded('images') && $item->product->images->isNotEmpty()) {
@@ -82,17 +81,14 @@
                                                             
                                                             if ($primaryImage) {
                                                                 $originalPath = $primaryImage->image_path; // Cambiado de 'path' a 'image_path'
-                                                                $debugInfo['original_path'] = $originalPath;
                                                                 
                                                                 // Si es una URL completa, usarla directamente
                                                                 if (str_starts_with($originalPath, 'http')) {
                                                                     $imageUrl = $originalPath;
-                                                                    $debugInfo['type'] = 'full_url';
                                                                 } 
                                                                 // Si la ruta ya incluye 'storage/', usarla como está
                                                                 elseif (str_starts_with($originalPath, 'storage/')) {
                                                                     $imageUrl = asset($originalPath);
-                                                                    $debugInfo['type'] = 'storage_path';
                                                                 } 
                                                                 // Para rutas relativas, asumir que están en storage/app/public/images/products
                                                                 else {
@@ -135,14 +131,7 @@
                                                         @endif
                                                         
                                                         <!-- Debug info (solo visible en entorno local) -->
-                                                        @if(app()->environment('local'))
-                                                            <div class="absolute -bottom-24 left-0 text-xs bg-white p-1 border border-gray-300 rounded z-10" style="width: 250px; max-height: 100px; overflow-y: auto;">
-                                                                <div class="font-bold mb-1">Debug Info:</div>
-                                                                @foreach($debugInfo as $key => $value)
-                                                                    <div><span class="font-semibold">{{ $key }}:</span> {{ $value }}</div>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
+                                                        
                                                     </div>
                                                     <div class="ml-4">
                                                         <a href="{{ route('products.show', $item->product) }}"

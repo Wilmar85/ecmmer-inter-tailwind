@@ -46,18 +46,24 @@ class ProductController extends Controller
             $validated['sku'] = 'SKU-' . time() . '-' . mt_rand(1000, 9999);
         }
         $validated['active'] = $request->input('active', 0);
-        // Normalizar la marca (Primera letra mayúscula, resto minúsculas)
-        $brandName = ucfirst(mb_strtolower(trim($request->brand_name)));
-        // Buscar marca existente (ignorando mayúsculas/minúsculas)
-        $brand = \App\Models\Brand::whereRaw('LOWER(name) = ?', [mb_strtolower($brandName)])->first();
-        if (!$brand) {
-            // Si no existe, crearla
-            $brand = \App\Models\Brand::create([
-                'name' => $brandName,
-                'slug' => \Illuminate\Support\Str::slug($brandName)
-            ]);
+        // Manejar la marca si se proporciona
+        if ($request->has('brand_name') && !empty($request->brand_name)) {
+            // Normalizar la marca (Primera letra mayúscula, resto minúsculas)
+            $brandName = ucfirst(mb_strtolower(trim($request->brand_name)));
+            // Buscar marca existente (ignorando mayúsculas/minúsculas)
+            $brand = \App\Models\Brand::whereRaw('LOWER(name) = ?', [mb_strtolower($brandName)])->first();
+            if (!$brand) {
+                // Si no existe, crearla
+                $brand = \App\Models\Brand::create([
+                    'name' => $brandName,
+                    'slug' => \Illuminate\Support\Str::slug($brandName)
+                ]);
+            }
+            $validated['brand_id'] = $brand->id;
+        } else {
+            // Si no se proporciona marca, establecer como NULL
+            $validated['brand_id'] = null;
         }
-        $validated['brand_id'] = $brand->id;
         $product = Product::create($validated);
         $files = $request->file('images');
         if ($files) {
@@ -72,16 +78,11 @@ class ProductController extends Controller
                 // Agregar más tamaños según sea necesario
             ];
             
-            $imageService = new ImageOptimizerService();
-            
+            // Guardar la imagen sin optimización si no está disponible el servicio
             foreach ($files as $image) {
                 if ($image && $image->isValid()) {
-                    // Optimizar y redimensionar la imagen
-                    $path = $imageService->optimizeAndResize(
-                        $image,
-                        'images/products',
-                        $sizes
-                    );
+                    $fileName = time() . '_' . $image->getClientOriginalName();
+                    $path = $image->storeAs('images/products', $fileName, 'public');
                     
                     // Guardar la ruta relativa en la base de datos
                     $product->images()->create(['image_path' => $path]);
@@ -128,21 +129,24 @@ class ProductController extends Controller
 
         $validated['active'] = $request->input('active', 0);
         
-        // Normalizar la marca (Primera letra mayúscula, resto minúsculas)
-        $brandName = ucfirst(mb_strtolower(trim($request->brand_name)));
-        
-        // Buscar marca existente (ignorando mayúsculas/minúsculas)
-        $brand = \App\Models\Brand::whereRaw('LOWER(name) = ?', [mb_strtolower($brandName)])->first();
-        
-        if (!$brand) {
-            // Si no existe, crearla
-            $brand = \App\Models\Brand::create([
-                'name' => $brandName,
-                'slug' => \Illuminate\Support\Str::slug($brandName)
-            ]);
+        // Manejar la marca si se proporciona
+        if ($request->has('brand_name') && !empty($request->brand_name)) {
+            // Normalizar la marca (Primera letra mayúscula, resto minúsculas)
+            $brandName = ucfirst(mb_strtolower(trim($request->brand_name)));
+            // Buscar marca existente (ignorando mayúsculas/minúsculas)
+            $brand = \App\Models\Brand::whereRaw('LOWER(name) = ?', [mb_strtolower($brandName)])->first();
+            if (!$brand) {
+                // Si no existe, crearla
+                $brand = \App\Models\Brand::create([
+                    'name' => $brandName,
+                    'slug' => \Illuminate\Support\Str::slug($brandName)
+                ]);
+            }
+            $validated['brand_id'] = $brand->id;
+        } else {
+            // Si no se proporciona marca, establecer como NULL
+            $validated['brand_id'] = null;
         }
-        
-        $validated['brand_id'] = $brand->id;
         
         // Actualizar el producto
         $product->update($validated);
@@ -163,11 +167,8 @@ class ProductController extends Controller
             
             foreach ($files as $image) {
                 if ($image && $image->isValid()) {
-                    // Guardar en storage/app/public/images/products
-                    $path = $image->store($storagePath, 'public');
-                    
-                    // Optimizar la imagen
-                    ImageOptimizer::optimize(storage_path('app/public/' . $path));
+                    $fileName = time() . '_' . $image->getClientOriginalName();
+                    $path = $image->storeAs($storagePath, $fileName, 'public');
                     
                     // Guardar la ruta relativa en la base de datos
                     $product->images()->create(['image_path' => $path]);

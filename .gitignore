@@ -7,7 +7,7 @@
 /.phpunit.cache
 
 # Archivos de entorno
-.env
+./env
 .env.*.local
 .env.backup
 .env.production
